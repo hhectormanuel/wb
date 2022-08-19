@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import { useScreenSize } from '../hooks/useScreenSize';
+import { StarOutline } from '@mui/icons-material';
 
 export const Publicaciones = () => {
 
@@ -29,17 +30,10 @@ export const Publicaciones = () => {
     }, [width])
 
   return (
-    <Grid
-    container
-    spacing={0}
-    direction="column"
-    alignItems="center"
-    justify="center"
-    // style={{ minHeight: '100vh' }}
-   >
+    <Grid container spacing={0} direction="column" alignItems="center" justify="center">
   
     <Grid item xs={3}>
-    <Card sx={{ maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }` }}>
+    <Card sx={{ maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }`, mt: 5 }}>
     <CardMedia
       component="img"
       height="400"
