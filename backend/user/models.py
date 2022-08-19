@@ -44,6 +44,8 @@ class UserExtend(models.Model):
     ##    follows = len(self.follows)
     ##    return follows
 
+class followers(models.Model):
+    pass
 
 
 def create_user(sender, instance, created,  **kwargs):
