@@ -1,25 +1,36 @@
-import React from 'react'
+import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 
-export const Navbar = () => {
+
+export const NavBar = ({ drawerWidth = 205 }) => {
+
+
   return (
-    <div className="w-full bg-green-700 p-4 flex flex-col xl:flex-row gap-4 items-center justify-center md:justify-between">
-    <h1 className="text-white uppercase font-semibold cursor-pointer text-xl">
-    WHITEXICANS
-    </h1>
-    <nav className="flex items-center gap-4">
-        <a
-            href="#"
-            className="xl:py-1 text-white xl:px-2 rounded-lg hover:bg-green-800 transition-colors"
-        >
-            Inicio
-        </a>
-        <a
-            href="#"
-            className="xl:py-1 text-white xl:px-2 rounded-lg hover:bg-green-800 transition-colors"
-        >
-            Contacto
-        </a>
-    </nav>
-</div>
+    <AppBar 
+        position='fixed'
+        sx={{ 
+            width: { sm: `calc(100% - ${ drawerWidth }px)` },
+            ml: { sm: `${ drawerWidth }px` }
+         }}
+    >
+        <Toolbar>
+            <IconButton
+                color='inherit'
+                edge="start"
+                sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+                <MenuOutlined />
+            </IconButton>
+
+            <Grid container direction='row' justifyContent='space-between' alignItems='center'>
+                <Typography variant='h6' noWrap component='div'> Whitexicans </Typography>
+
+                <IconButton color='error'>
+                    <LogoutOutlined />
+                </IconButton>
+            </Grid>
+
+        </Toolbar>
+    </AppBar>
   )
 }

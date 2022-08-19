@@ -1,10 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { Index } from './whitexicans/pages/Index'
+import { Index } from './whitexicans'
+import { BrowserRouter } from 'react-router-dom'
+import { AppTheme } from './UI/theme/AppTheme'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Index/>
-  </React.StrictMode>
+  <BrowserRouter>
+  <AppTheme>
+  <Index/>
+  </AppTheme>
+  </BrowserRouter>
 )

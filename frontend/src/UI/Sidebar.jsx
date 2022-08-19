@@ -1,51 +1,55 @@
-import { useEffect, useState } from "react";
-import { useScreenSize } from "../hooks/useScreenSize";
-import { Publicaciones } from "../whitexicans/components/Publicaciones";
+import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
+import { TurnedInNot } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { SideBarItem } from './components/SideBarItem';
+import HomeIcon from '@mui/icons-material/Home';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
+import { useScreenSize } from '../whitexicans/hooks/useScreenSize';
 
-export const Sidebar = () => {
+export const SideBar = ({ drawerWidth = 240 }) => {
 
-  const { width, height } = useScreenSize();
+    const { width, height } = useScreenSize();
 
-    const [open, setOpen] = useState(true);
-    const Menus = [
-      { title: "Publicaciones", src: "Publicaciones" },
-      { title: "Cerrar Sesión", src: "Logout" },
+    const Navegacion = [
+        {id: 1, nombre: 'Inicio', icon: <HomeIcon/>},
+        {id: 2, nombre: 'Crear publicación', icon: <DynamicFeedIcon/>}
     ];
 
+    const [open, setOpen] = useState(false);
+
     const getSizeScreen = () => {
-      if(width >= 857) {
-        setOpen(true);
+        if(width >= 606) {
+          setOpen(true);
+        };
+    
+        if(width <= 599){
+          setOpen(false);
+        }
       };
   
-      if(width <= 856){
-        setOpen(false);
-      }
-    };
-
-    useEffect(() => {
-      getSizeScreen();
-    }, [width])
-    
+      useEffect(() => {
+        getSizeScreen();
+      }, [width])
 
   return (
-        <div className="flex">
-            <div className={` ${ open ? "w-72" : "w-20 "}  bg-green-600 font-semibold h-screen p-5  pt-8 relative duration-300`}>
-                {/* <img src="./src/assets/control.png" className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple border-2 rounded-full  ${!open && "rotate-180"}`} onClick={() => setOpen(!open)}/> */}
-                <div className="flex gap-x-4 items-center">
-                <img src="./src/assets/logo.png" className={`cursor-pointer duration-500 ${ open && "rotate-[360deg]" }`}/>
-                <h1 className={`text-white origin-left font-medium text-xl duration-200 ${ !open && "scale-0" }`}> NombreUsuario</h1>
-            </div>
+    <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+        <Drawer variant='permanent' sx={{  display: { xs: 'block' },'& .MuiDrawer-paper': { boxSizing: 'border-box', width: `${ open ? drawerWidth : '52px' } ` } }}>
+            {/* <Toolbar sx={{background: '#388e3c'}}>
+                <Typography variant='h6' noWrap component='div'>
+                </Typography>
+            </Toolbar>
+            <Divider /> */}
 
-        <ul className="pt-6">
-          {Menus.map((Menu, index) => (
-            <li key={index} className={`flex  rounded-md p-2 cursor-pointer hover:bg-green-800 text-white text-xl items-center gap-x-4  ${Menu.gap ? "mt-9" : "mt-2"} ${ index === 0 && "bg-light-white" } `}>
-              <img src={`./src/assets/${Menu.src}.png`} />
-              <span className={`${!open && "hidden"} origin-left duration-200`}>{Menu.title}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <Publicaciones/>
-    </div>
+            <List>
+                {
+                    Navegacion.map( icons => (
+                        <SideBarItem key={icons.id} {...icons}/>
+                    ))
+                }
+            </List>
+
+        </Drawer>
+
+    </Box>
   )
 }

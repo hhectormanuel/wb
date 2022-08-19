@@ -1,10 +1,13 @@
 import React from 'react'
+import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import { Publicaciones } from '../components/Publicaciones'
-import { PagesLayout } from '../layout/PagesLayout'
 
 export const Index = () => {
   return (
-    <PagesLayout>
-    </PagesLayout>
-  )
+    <>
+    <WhitexicansLayout>
+        <Publicaciones/>
+    </WhitexicansLayout>
+    </>
+    )
 }
