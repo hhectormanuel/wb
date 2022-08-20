@@ -21,14 +21,14 @@ class UserExtend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number=models.FloatField(validators=[phone_number_validator] ,max_length=9999999999, unique=True, blank=True, null=True)
     ##phone number validator doesnt work
-    profile_image=models.ImageField(upload_to=profile_img)
+    profile_image=models.ImageField(upload_to=profile_img, null= True, blank=True)
     account_created = models.DateTimeField(auto_now_add=True)
     follows = models.ManyToManyField(User, related_name='follows')
 
     def defaultSlug(self):
         return '{}{}'.format(self.user.username, str(self.account_created).replace('-','').replace(' ', '').replace('.', '').replace(':', ''))
 
-    slug = models.SlugField(unique=True,default=defaultSlug, null=False, blank=False)
+    slug = models.SlugField(unique=True, null=False, blank=False)
 
 
     def __str__(self):
