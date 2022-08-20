@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
             login(access, username, user_id);
           } catch (error) {
             logout();
-            if(error.response.data.detail === 'No active account found with the given credentials')
+            if(error.response?.data.detail === 'No active account found with the given credentials')
             setError('Los datos ingresados son incorrectos');
           }
         };

@@ -26,7 +26,7 @@ export const useAuthStore = () => {
             login(access, username, user_id );
         } catch (error) {
             console.log(error)
-            localStorage.clear();
+            localStorage.removeItem('refresh');
             logout();
         }
     }

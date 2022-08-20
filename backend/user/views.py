@@ -1,18 +1,14 @@
-from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
 from .serializer import UserSerializer, UserExtendSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 from django.contrib.auth.models import User
 from .models import UserExtend
 
-
-from django.http import JsonResponse
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -27,27 +23,25 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+
+## Login CreateAPIView
+class SingUp(CreateAPIView):
+    serializer_class=UserSerializer
+
+
+
 @api_view(['GET'])
-def getRoutes(request):
-    routes = [
-        'api/token',
-        'apid/token/refresh'
-    ]
-
-    return Response(routes)
-
-
-
-class UserViewSet(ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = serializer_class.Meta.model.objects.all()
-
-
-@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
 def UserApiView(request, slug):
+    permission_classes = (IsAuthenticated,)
     if request.method == 'GET':
         userExtend = UserExtend.objects.get(slug = slug)
-        user = userExtend.user
         userSerializer = UserExtendSerializer(userExtend)
-        return Response(userSerializer.data, status=status.HTTP_200_OK)
-
+        userSerializer2 = UserSerializer(User.objects.get(id = userSerializer.data.get('user')))
+        return Response({
+            'name':userSerializer.data.get('name'),
+            'profile_img' : userSerializer.data.get('profile_image'),
+            'account_created': userSerializer.data.get('account_created'),
+            'follows': userSerializer.data.get('follows'),
+            'user' : userSerializer2.data
+        }, status=status.HTTP_200_OK)

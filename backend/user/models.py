@@ -19,8 +19,6 @@ phone_number_validator = RegexValidator(r'^[0-9]{10}$', 'Please write a valid nu
 
 class UserExtend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name=models.CharField(max_length=50)
-    last_name=models.CharField(max_length=60)
     phone_number=models.FloatField(validators=[phone_number_validator] ,max_length=9999999999, unique=True, blank=True, null=True)
     ##phone number validator doesnt work
     profile_image=models.ImageField(upload_to=profile_img)

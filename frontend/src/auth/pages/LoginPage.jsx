@@ -11,7 +11,7 @@ const formData = {
 
 const formValidations = {
   username: [ (value) => value.length >= 5 , 'El nombre debe contener mas de 5 caracteres'],
-  password: [  (value) => value.length >= 4, 'La contraseña debe tener 6 caracteres o más' ],
+  password: [  (value) => value.length >= 3, 'La contraseña debe tener 6 caracteres o más' ],
 }
 
 export const LoginPage = () => {

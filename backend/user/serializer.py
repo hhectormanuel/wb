@@ -5,10 +5,14 @@ from .models import UserExtend
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('password', 'username', 'first_name', 'last_name', 'email',)
+        fields = ('username', 'password', 'first_name', 'last_name', 'email',)
 
-    def save(self, **kwargs):
-        return super().save(**kwargs)
+    
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 class UserExtendSerializer(ModelSerializer):
     class Meta:
