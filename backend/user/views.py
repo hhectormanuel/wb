@@ -2,14 +2,14 @@ from .serializer import UserSerializer, UserExtendSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView
 from django.contrib.auth.models import User
 from .models import UserExtend
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
-
+import jwt
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -27,6 +27,16 @@ class MyTokenObtainPairView(TokenObtainPairView):
 ## Login CreateAPIView
 class SingUp(CreateAPIView):
     serializer_class=UserSerializer
+
+
+class PruebaGenericAPIView(GenericAPIView):
+    serializer_class=UserSerializer
+    #permission_classes = (IsAuthenticated,)
+    
+    def get(self, request, *args, **kwargs):
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxMDE1MDM4LCJpYXQiOjE2NjEwMTQ3MzgsImp0aSI6ImQ4YWFkNzFmOTk3OTQxZjNiNDA1MWJjNTFjMDI0OTM4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJoZWN0b3IifQ.9hnhzHf0xPoOruxxH_JPIQLVP9tfNdmcQuWC_Sr39Qg'
+        print(jwt.decode(jwt=token,algorithms=['HS256']))
+        return Response({})
 
 
 
