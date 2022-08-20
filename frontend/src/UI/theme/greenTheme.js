@@ -7,10 +7,10 @@ export const greenTheme = createTheme({
             main: '#388e3c'
         },
         secondary: {
-            main: '#543884'
+            main: '#e3f2fd'
         },
         error: {
-            main: '#e3f2fd'
+            main: red.A400
         }
     }
 })

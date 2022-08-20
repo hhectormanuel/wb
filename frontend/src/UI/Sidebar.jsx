@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
-import { TurnedInNot } from '@mui/icons-material';
+import { LogoutOutlined, TurnedInNot } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { SideBarItem } from './components/SideBarItem';
 import HomeIcon from '@mui/icons-material/Home';
@@ -12,7 +12,8 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 
     const Navegacion = [
         {id: 1, nombre: 'Inicio', icon: <HomeIcon/>},
-        {id: 2, nombre: 'Crear publicación', icon: <DynamicFeedIcon/>}
+        {id: 2, nombre: 'Crear publicación', icon: <DynamicFeedIcon/>},
+        { id: 3, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> }
     ];
 
     const [open, setOpen] = useState(false);

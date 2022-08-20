@@ -1,11 +1,14 @@
-import { AddOutlined } from '@mui/icons-material'
+import { AddOutlined, LineAxisOutlined } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import React from 'react'
+import { useState } from 'react'
 import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import { CrearPublicacion } from '../components/CrearPublicacion'
 import { Publicaciones } from '../components/Publicaciones'
 
-export const Index = () => {
+
+export const Index = () => { 
+
   return (
     <>
     <WhitexicansLayout>
@@ -25,6 +28,7 @@ export const Index = () => {
       >
         <AddOutlined sx={{ fontSize: 30 }} />
       </IconButton>
+
     </WhitexicansLayout>
     </>
     )
