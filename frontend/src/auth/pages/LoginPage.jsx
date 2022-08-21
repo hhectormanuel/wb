@@ -1,9 +1,24 @@
 
-import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useContext, useState } from 'react';
 import { useForm } from '../../whitexicans/hooks/useForm';
 import { AuthContext } from '../context/AuthContext';
 import { AuthLayout } from '../layout/AuthLayout';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { NavLink } from 'react-router-dom';
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="/">
+        WhitexicansBlog
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+};
 
 const formData = {
   username: '', password: ''
@@ -11,7 +26,7 @@ const formData = {
 
 const formValidations = {
   username: [ (value) => value.length >= 5 , 'El nombre debe contener mas de 5 caracteres'],
-  password: [  (value) => value.length >= 3, 'La contraseña debe tener 6 caracteres o más' ],
+  password: [  (value) => value.length >= 4, 'La contraseña debe tener 6 caracteres o más' ],
 }
 
 export const LoginPage = () => {
@@ -30,62 +45,74 @@ export const LoginPage = () => {
   }
 
   return (
-    <AuthLayout title="INICIAR SESIÓN">
+    <AuthLayout title='Iniciar Sesion'>
+                  <h1 className='titulo' align="center" component="h1" variant="h1" sx={{ mt: 2, mb: 8 }}>
+              WHITEXICANS BLOG
+            </h1>
       <form onSubmit={onLogin} className='animate__animated animate__fadeIn'>
-          <Grid container>
-            <Grid item xs={ 12 } sx={{ mt: 2 }}>
-              <TextField 
-                label="Username" 
-                type="text" 
-                placeholder='Username' 
+          
+      <Avatar sx={{ m: 1, bgcolor: 'primary.main', mx: 'auto' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography align="center" component="h1" variant="h5" sx={{ mt: 2 }}>
+              INICIAR SESIÓN
+            </Typography>
+            <Box noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
                 fullWidth
-                name='username'
+                id="email"
+                label="Username"
+                name="username"
+                autoComplete="email"
+                autoFocus
                 value={username}
-                onChange={onInputChange}
+                onChange={ onInputChange }
                 error={ !!usernameValid && formSubmitted }
                 helperText={ usernameValid }
               />
-            </Grid>
-
-            <Grid item xs={ 12 } sx={{ mt: 2 }}>
-              <TextField 
-                label="Contraseña" 
-                type="password" 
-                placeholder='Contraseña' 
+              <TextField
+                margin="normal"
                 fullWidth
-                name='password'
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
                 value={password}
-                onChange={onInputChange}
+                onChange={ onInputChange }
                 error={ !!passwordValid && formSubmitted }
                 helperText={ passwordValid }
               />
-            </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                ENTRAR
+              </Button>
 
-            <Grid container>
-            <Grid item xs={12} sx={{mt: 2}} display={!!error ? '' : 'none'}>
-              {/* <Grid item xs={12} sx={{mt: 2}}> */}
+              <Grid container>
+              <Grid item xs={12} sx={{mt: 2}} display={!!error ? '' : 'none'}>
                 <Alert severity='error'>{error}</Alert>
               </Grid>
-            </Grid>
-            
-            <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
-              <Grid item xs={ 12 } sm={ 6 }>
-                <Button type='submit' variant='contained' fullWidth>
-                  Login
-                </Button>
+            </Grid><br/>
+
+              <Grid container>
+                {/* <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid> */}
+                <Grid item>
+                  <NavLink to='/auth/register'>
+                    {"¿No tienes una cuenta? Registrate aquí"}
+                  </NavLink>
+                </Grid>
               </Grid>
-            </Grid>
-
-
-            <Grid container direction='row' justifyContent='end'>
-              <Link color='inherit' to="/auth/register">
-                Crear una cuenta
-              </Link>
-            </Grid>
-
-          </Grid>
-
-
+              <Copyright sx={{ mt: 5 }} />
+            </Box>
         </form>
 
     </AuthLayout>

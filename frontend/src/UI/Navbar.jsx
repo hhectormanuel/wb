@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../auth/context/AuthContext';
 
 
-export const NavBar = ({ drawerWidth = 205 }) => {
+export const NavBar = ({ drawerWidth = 255 }) => {
 
     const { user } = useContext(AuthContext);
 

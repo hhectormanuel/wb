@@ -5,6 +5,9 @@ import { SideBarItem } from './components/SideBarItem';
 import HomeIcon from '@mui/icons-material/Home';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { useScreenSize } from '../whitexicans/hooks/useScreenSize';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const SideBar = ({ drawerWidth = 240 }) => {
 
@@ -13,7 +16,10 @@ export const SideBar = ({ drawerWidth = 240 }) => {
     const Navegacion = [
         {id: 1, nombre: 'Inicio', icon: <HomeIcon/>},
         {id: 2, nombre: 'Crear publicación', icon: <DynamicFeedIcon/>},
-        { id: 3, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> }
+        { id: 3, nombre: 'Más populares', icon: <PostAddIcon/> },
+        { id: 4, nombre: 'Publicaciones de amigos', icon: <LocalPostOfficeIcon/> },
+        { id: 5, nombre: 'Perfíl', icon: <AccountCircleIcon/> },
+        { id: 6, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> },
     ];
 
     const [open, setOpen] = useState(false);

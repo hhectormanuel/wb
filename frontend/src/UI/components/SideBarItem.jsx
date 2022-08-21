@@ -6,16 +6,24 @@ import { AuthContext } from '../../auth/context/AuthContext';
 
 export const SideBarItem = ({ nombre, icon, id }) => {
 
-  const { logout } = useContext(AuthContext);
+  const { logout, openModal, setOpenModal } = useContext(AuthContext);
 
-  const onLogout = (id) => {
-    if(id !== 3) return;
+  const onClickSideBar = (id) => {
+    if(id === 6){
+      logout();
+    }
+    else if(id === 2){
+      setOpenModal(true);
+    }
 
-    logout();
+  }
+
+  const onCreatePublication = (id) => {
+
   }
 
   return (
-    <ListItem onClick={ ()=>onLogout(id) } disablePadding>
+    <ListItem onClick={ ()=>onClickSideBar(id) } disablePadding>
     <ListItemButton>
         <ListItemIcon>
             {icon}

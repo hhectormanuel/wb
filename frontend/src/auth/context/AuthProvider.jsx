@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
 
     const [user, dispatch] = useReducer(authReducer, [{}], init);
     const [error, setError] = useState();
+    const [openModal, setOpenModal] = useState(false);
     let access = '';
     let refresh = '';
 
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }) => {
         dispatch(action);
         localStorage.clear();
     };
-//075
+
     const onStartLogin = async(username, password) => {
 
         checkingAuth();
@@ -84,13 +85,31 @@ export const AuthProvider = ({ children }) => {
             login(access, username, user_id);
           } catch (error) {
             logout();
-            if(error.response?.data.detail === 'No active account found with the given credentials')
+            if(error.response.data.detail === 'No active account found with the given credentials')
             setError('Los datos ingresados son incorrectos');
           }
         };
+
+    const onStartRegister = async(username, password, firstName, lastName, email) => {
+        checkingAuth();
+        try {
+            const registerUrl = 'http://localhost:8000/signup/';
+            const resp = await axios({
+                method: 'post',
+                url: registerUrl,
+                data: {
+                    username: username, password: password, first_name: firstName, last_name: lastName, email: email
+                }
+            });
+            onStartLogin(username, password)
+        } catch (error) {
+            logout();
+            setError(error.response.data.username)
+        }
+    }
  
   return (
-    <AuthContext.Provider value={{ onStartLogin, logout, checkingAuth, login, error: error, user: user }}>
+    <AuthContext.Provider value={{ onStartLogin, logout, checkingAuth, login, error: error, user: user, onStartRegister, setError, openModal: openModal, setOpenModal }}>
         { children }
     </AuthContext.Provider>
   )
