@@ -12,9 +12,9 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=40, null=True, blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False)
-    desciption = models.TextField(null=True, max_length=255)
+    description = models.TextField(null=True, max_length=255)
 
     def __str__(self):
         return '{} by {}'.format(self.title, self.author.username)

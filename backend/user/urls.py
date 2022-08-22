@@ -1,7 +1,7 @@
 from django.conf.urls.static import static
 from django.urls import path
 from django.conf import settings
-from .views import UserApiView, MyTokenObtainPairView, SingUp, PruebaListAPIView
+from .views import UserApiView, MyTokenObtainPairView, SingUp, PruebaListAPIView, ProfileAPIView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -11,8 +11,9 @@ from rest_framework_simplejwt.views import (
 app_name='user'
 
 urlpatterns = [
-    path('profile/<slug:slug>', UserApiView, name='profile'),
-    path('signup/', SingUp.as_view()),
+    path('<slug:slug>', ProfileAPIView.as_view(), name='profile'),
+    #path('<slug:slug>', UserApiView, name='profile'),
+    path('signup/', SingUp.as_view(), name='signup'),
     path('prueba/', PruebaListAPIView.as_view()),
 
 
