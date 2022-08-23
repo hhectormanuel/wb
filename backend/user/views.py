@@ -22,6 +22,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         token['username'] = user.username
+        token['slug'] = UserExtend.objects.get(user=user).slug
 
         return token
 
@@ -32,6 +33,26 @@ class MyTokenObtainPairView(TokenObtainPairView):
 ## Login CreateAPIView
 class SingUp(CreateAPIView):
     serializer_class=UserSerializer
+
+
+#Prueba Post Posts
+class PruebaPost(APIView):
+    def get(self, request):
+        return Response({}, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        data = {
+            'author' : request.user.id,
+            'title' : request.data['title'],
+            'description' : request.data['description'],
+            'category' : request.data['category']
+        }
+        post_serializer = PostSerializer(data=data)
+        if post_serializer.is_valid():
+            post_serializer.save()
+            return Response({
+                'bien': 'todo saliio correctamente'
+            })
+        return Response({}, status=status.HTTP_200_OK)
 
 
 ## clase de prueba para probar funcionalidades en el sitio
