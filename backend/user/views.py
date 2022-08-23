@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from post.serializer import PostSerializer
 from post.models import Post
 from rest_framework.views import APIView
+from post.post import post_category_user
 
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -39,7 +40,7 @@ class SingUp(CreateAPIView):
 class PruebaListAPIView(ListAPIView):
     serializer_class = UserSerializer
     queryset = serializer_class.Meta.model.objects.all()
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         user = request.user
@@ -50,8 +51,10 @@ class PruebaListAPIView(ListAPIView):
 class ProfileView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserExtendSerializer
     queryset = serializer_class.Meta.model.objects.all()
+    permission_classes = (IsAuthenticated,)
 
 class ProfileAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, slug, *args, **kwargs):
         userExtend = UserExtend.objects.get(slug = slug)
         serializer = UserExtendSerializer(userExtend)
@@ -68,20 +71,24 @@ class ProfileAPIView(APIView):
         }, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
-        data = {
-            'author' : request.user.id,
-            'title' : request.data['title'],
-            'description' : request.data['description'],
-            'category' : request.data['category']
-        }
-        post_serializer = PostSerializer(data=data)
-        if post_serializer.is_valid():
-            post_serializer.save()
-            return Response({
-                'bien': 'todo saliio correctamente'
-            })
-        return Response({'error' : 'algo ha salido mal'}, status=status.HTTP_400_BAD_REQUEST)
+        return post_category_user(self, request, *args, **kwargs)
     
     def put(self, request, *args, **kwargs):
         pass
 
+##vista para hacer follow/unfollow
+class FollowAPIView(APIView):
+    #permission_classes = (IsAuthenticated,)
+    def post(self, request, slug, *args, **kwargs):
+        user = request.user
+        myUser = UserExtend.objects.get(user = user)
+        follow_to = UserExtend.objects.get(slug = slug)
+
+        if follow_to.user in myUser.follows.all():
+            myUser.follows.remove(follow_to.user)
+            follow_to.followers.remove(user)
+            return Response({'correcto' : 'haz dejado de seguir'}, status.HTTP_200_OK)
+        else:
+            myUser.follows.add(follow_to.user)
+            follow_to.followers.add(user)
+            return Response({'correcto' : 'haz comenzado a seguir'}, status.HTTP_200_OK)
