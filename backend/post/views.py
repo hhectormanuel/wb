@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .serializer import CategoriaSerializer
 from .models import Category, Post
 from rest_framework.response import Response
@@ -15,7 +15,18 @@ class CategoriaListAPIView(ListAPIView):
 
 class CategoryAPIView(APIView):
     def get(self, request, slug):
-        return Response({'categoria': slug}, status=status.HTTP_200_OK)
+        category = Category.objects.get(slug = slug)
+        post = Post.objects.filter(category = category)
+        postserializer = PostSerializer(post, many = True)
+
+        return Response(postserializer.data, status=status.HTTP_200_OK)
+
+
+class CategoryRetriveApiView(RetrieveAPIView):
+    serializer_class = ""
+
+    
+
 
 
 class PostAPIVIew(APIView):
