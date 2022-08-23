@@ -12,6 +12,10 @@ class CategoriaListAPIView(ListAPIView):
     serializer_class = CategoriaSerializer
     queryset = serializer_class.Meta.model.objects.all()
 
+class CategoryAPIView(APIView):
+    def get(self, request, slug):
+        return Response({'categoria': slug}, status=status.HTTP_200_OK)
+
 
 class PostAPIVIew(APIView):
     permission_classes = (IsAuthenticated,)
@@ -31,3 +35,5 @@ class PostAPIVIew(APIView):
                 'bien': 'todo saliio correctamente'
             })
         return Response({}, status=status.HTTP_200_OK)
+
+

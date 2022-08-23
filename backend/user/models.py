@@ -24,6 +24,7 @@ class UserExtend(models.Model):
     profile_image=models.ImageField(upload_to=profile_img, null= True, blank=True)
     account_created = models.DateTimeField(auto_now_add=True)
     follows = models.ManyToManyField(User, related_name='follows', blank=True)
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
 
     def defaultSlug(self):
         return '{}{}'.format(self.user.username, str(self.account_created).replace('-','').replace(' ', '').replace('.', '').replace(':', ''))
@@ -35,7 +36,8 @@ class UserExtend(models.Model):
         return self.slug
 
     def total_posts(self):
-        posts = len(self.post_set.all())
+        user = User.objects.get(slug = self.slug)
+        posts = len(user.post_set.all())
         return posts
     
     #yo a cuantos sigo
@@ -45,16 +47,9 @@ class UserExtend(models.Model):
 
     ## cuantos me sigen a mi
     def get_followers(self):
-        followers = []
-        for usuario in User.objects.all():
-            for follow in usuario.follows.all():
-                if follow == self.user:
-                    #follow me sigue
-                    followers.append(follow.username)
+        followers = self.followers.all()
         return followers
 
-class followers(models.Model):
-    pass
 
 
 def create_user(sender, instance, created,  **kwargs):
