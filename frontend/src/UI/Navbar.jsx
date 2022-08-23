@@ -2,11 +2,14 @@ import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 import { useContext } from 'react';
 import { AuthContext } from '../auth/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 
 export const NavBar = ({ drawerWidth = 255 }) => {
 
     const { user } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
   return (
     <AppBar 
@@ -28,7 +31,7 @@ export const NavBar = ({ drawerWidth = 255 }) => {
             <Grid container direction='row' justifyContent='space-between' alignItems='center'>
                 <Typography variant='h6' noWrap component='div'> Whitexicans </Typography>
 
-                <IconButton color='secondary'>
+                <IconButton onClick={()=>navigate(`/perfil/${ user.slug }`)} color='secondary'>
                 <Typography variant='h6' noWrap component='div'> { user.username } &nbsp; </Typography>
                     {/* <LogoutOutlined onClick={onLogout} /> */}
                 </IconButton>

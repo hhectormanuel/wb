@@ -40,7 +40,8 @@ export const RegisterPage = () => {
       e.preventDefault();
       setFormSubmitted(true);
       if (!isFormValid) return;
-      if(password !== passwordValid) {
+      if(password != confirmPassword) {
+        console.log(password, passwordValid)
         setError('Las contraseñas no coinciden')
         return;
       }

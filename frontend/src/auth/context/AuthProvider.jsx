@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     const [openModal, setOpenModal] = useState(false);
     let access = '';
     let refresh = '';
+    let slug = '';
 
     const checkingAuth = () => {
         const user = {
@@ -38,12 +39,15 @@ export const AuthProvider = ({ children }) => {
         dispatch(action);
     };
 
-    const login = (access, username, user_id) => {
+    const login = (access, username, user_id, slug, follows, posts) => {
         const user = {
             status: 'auth',
             id: user_id,
             username: username,
-            access: access
+            access: access,
+            slug: slug,
+            follows: follows,
+            posts: posts,
         };
         const action = {
             type: types.login,
@@ -77,15 +81,21 @@ export const AuthProvider = ({ children }) => {
             refresh = resp.data.refresh;
             access = resp.data.access;
             const decoded = jwt_decode(access);
+            slug = decoded.slug;
             const { user_id } = decoded;
             localStorage.setItem('token', access);
             localStorage.setItem('token-init-date', decoded.exp);
             localStorage.setItem('refresh', refresh);
-    
-            login(access, username, user_id);
+
+            const profile = `http://127.0.0.1:8000/${slug}`;
+            const respuesta = await fetch(profile);
+            const data = await respuesta.json();
+            const { follows, posts } = data;
+
+            login(access, username, user_id, slug, follows, posts);
           } catch (error) {
             logout();
-            if(error.response.data.detail === 'No active account found with the given credentials')
+            if(error.response?.data.detail === 'No active account found with the given credentials')
             setError('Los datos ingresados son incorrectos');
           }
         };

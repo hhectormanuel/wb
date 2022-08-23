@@ -21,16 +21,29 @@ export const AppRouter = () => {
         return (
             <CheckingAuth/>
         )
+    }else if(user.status === 'auth'){
+      return (
+        <Routes>
+          <Route path="/*" element={ <WhitexicansRoutes /> } />
+        </Routes>
+      )
     }
 
-  return (
-    <Routes>
-    {
-        user.status ==='auth'
-        ? <Route path="/*" element={ <WhitexicansRoutes /> } />
-        :<Route path="/auth/*" element={ <AuthRoutes /> } />
-    }
-    <Route path='/*' element={<Navigate to='/auth/login'></Navigate>}></Route>
-    </Routes>
-  )
+    return(
+      <Routes>
+        <Route path="/auth/*" element={ <AuthRoutes /> } />
+        <Route path='/*' element={<Navigate to='/auth/login'></Navigate>}></Route>
+      </Routes>
+    )
+
+  // return (
+  //   <Routes>
+  //   {
+  //       user.status ==='auth'
+  //       ? <Route path="/*" element={ <WhitexicansRoutes /> } />
+  //       :<Route path="/auth/*" element={ <AuthRoutes /> } />
+  //   }
+  //   <Route path='/*' element={<Navigate to='/auth/login'></Navigate>}></Route>
+  //   </Routes>
+  // )
 }

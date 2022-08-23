@@ -20,10 +20,16 @@ export const useAuthStore = () => {
             const decoded = jwt_decode(token);
             let username = decoded.username;
             let user_id = decoded.user_id;
+            let slug = decoded.slug;
             localStorage.setItem('token', resp.data.access);
             localStorage.setItem('token-init-date', decoded.exp);
             localStorage.setItem('refresh', resp.data.refresh)
-            login(access, username, user_id );
+            const profile = `http://127.0.0.1:8000/${slug}`;
+            const respuesta = await fetch(profile);
+            const data = await respuesta.json();
+            const { follows, posts } = data;
+
+            login(access, username, user_id, slug, follows, posts);
         } catch (error) {
             console.log(error)
             localStorage.clear();
