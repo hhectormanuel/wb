@@ -32,8 +32,8 @@ class PostAPIVIew(APIView):
         if post_serializer.is_valid():
             post_serializer.save()
             return Response({
-                'bien': 'todo saliio correctamente'
-            })
+                post_serializer.data
+            }, status=status.HTTP_201_CREATED)
         return Response({}, status=status.HTTP_200_OK)
 
 

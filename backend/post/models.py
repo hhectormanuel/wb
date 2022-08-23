@@ -34,7 +34,7 @@ class Post(models.Model):
 
 class PostImgs(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    images = models.ImageField()
+    images = models.CharField(max_length=400)
 
 
 

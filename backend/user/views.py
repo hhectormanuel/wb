@@ -62,9 +62,10 @@ class ProfileAPIView(APIView):
             'profile_img' : serializer.data.get('profile_image'),
             'account_created': serializer.data.get('account_created'),
             'follows': serializer.data.get('follows'),
+            'followers' : serializer.data.get('followers'),
             'user' : userSerializer.data,
             'posts' : posts.data,
-            'followers' : '',
+            
         }, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
