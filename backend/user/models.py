@@ -19,11 +19,11 @@ phone_number_validator = RegexValidator(r'^[0-9]{10}$', 'Please write a valid nu
 
 class UserExtend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number=models.FloatField(validators=[phone_number_validator] ,max_length=9999999999, unique=True, blank=True, null=True)
+    phone_number=models.FloatField(unique=True, blank=True, null=True)
     ##phone number validator doesnt work
     profile_image=models.ImageField(upload_to=profile_img, null= True, blank=True)
     account_created = models.DateTimeField(auto_now_add=True)
-    follows = models.ManyToManyField(User, related_name='follows')
+    follows = models.ManyToManyField(User, related_name='follows', blank=True)
 
     def defaultSlug(self):
         return '{}{}'.format(self.user.username, str(self.account_created).replace('-','').replace(' ', '').replace('.', '').replace(':', ''))
@@ -38,9 +38,20 @@ class UserExtend(models.Model):
         posts = len(self.post_set.all())
         return posts
     
-    ##def get_follows(self):
-    ##    follows = len(self.follows)
-    ##    return follows
+    #yo a cuantos sigo
+    def get_follows(self):
+        follows = len(self.follows.all())
+        return follows
+
+    ## cuantos me sigen a mi
+    def get_followers(self):
+        followers = []
+        for usuario in User.objects.all():
+            for follow in usuario.follows.all():
+                if follow == self.user:
+                    #follow me sigue
+                    followers.append(follow.username)
+        return followers
 
 class followers(models.Model):
     pass

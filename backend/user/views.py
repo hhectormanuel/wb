@@ -35,26 +35,6 @@ class SingUp(CreateAPIView):
     serializer_class=UserSerializer
 
 
-#Prueba Post Posts
-class PruebaPost(APIView):
-    def get(self, request):
-        return Response({}, status=status.HTTP_200_OK)
-    def post(self, request, *args, **kwargs):
-        data = {
-            'author' : request.user.id,
-            'title' : request.data['title'],
-            'description' : request.data['description'],
-            'category' : request.data['category']
-        }
-        post_serializer = PostSerializer(data=data)
-        if post_serializer.is_valid():
-            post_serializer.save()
-            return Response({
-                'bien': 'todo saliio correctamente'
-            })
-        return Response({}, status=status.HTTP_200_OK)
-
-
 ## clase de prueba para probar funcionalidades en el sitio
 class PruebaListAPIView(ListAPIView):
     serializer_class = UserSerializer
@@ -66,24 +46,6 @@ class PruebaListAPIView(ListAPIView):
         serializer = UserSerializer(User.objects.all(), many=True)
         return Response(serializer.data)
 
-
-@api_view(['GET'])
-##@permission_classes((IsAuthenticated,))
-def UserApiView(request, slug):
-    if request.method == 'GET':
-        userExtend = UserExtend.objects.get(slug = slug)
-        userSerializer = UserExtendSerializer(userExtend)
-        userSerializer2 = UserSerializer(User.objects.get(id = userSerializer.data.get('user')))
-        #posts = PostSerializer(Post.objects.all(), many=True)
-        posts = PostSerializer(Post.objects.filter(author = userExtend.user), many=True)
-        return Response({
-            'name':userSerializer.data.get('name'),
-            'profile_img' : userSerializer.data.get('profile_image'),
-            'account_created': userSerializer.data.get('account_created'),
-            'follows': userSerializer.data.get('follows'),
-            'user' : userSerializer2.data,
-            'posts' : posts.data
-        }, status=status.HTTP_200_OK)
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserExtendSerializer
@@ -102,6 +64,7 @@ class ProfileAPIView(APIView):
             'follows': serializer.data.get('follows'),
             'user' : userSerializer.data,
             'posts' : posts.data,
+            'followers' : '',
         }, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
@@ -121,3 +84,4 @@ class ProfileAPIView(APIView):
     
     def put(self, request, *args, **kwargs):
         pass
+
