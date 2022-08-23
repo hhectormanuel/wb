@@ -65,7 +65,6 @@ class ProfileAPIView(APIView):
             'followers' : serializer.data.get('followers'),
             'user' : userSerializer.data,
             'posts' : posts.data,
-            
         }, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):

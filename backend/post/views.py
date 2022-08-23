@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView
 from .serializer import CategoriaSerializer
-from .models import Category
+from .models import Category, Post
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -20,7 +20,7 @@ class CategoryAPIView(APIView):
 class PostAPIVIew(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
-        return Response({}, status=status.HTTP_200_OK)
+        return Response({'bien' : 'hizo bien'}, status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
         data = {
             'author' : request.user.id,
@@ -28,12 +28,14 @@ class PostAPIVIew(APIView):
             'description' : request.data['description'],
             'category' : request.data['category']
         }
+        imagenes = request.data['image']
         post_serializer = PostSerializer(data=data)
         if post_serializer.is_valid():
             post_serializer.save()
+            #buscarpost = Post.objects.get(author = request.user.id, title = request.data['title'])
+            #print(buscarpost)
             return Response({
-                post_serializer.data
             }, status=status.HTTP_201_CREATED)
-        return Response({}, status=status.HTTP_200_OK)
+        return Response({'bien':'no errores'}, status=status.HTTP_200_OK)
 
 
