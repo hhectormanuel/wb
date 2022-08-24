@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .serializer import CategoriaSerializer
 from .models import Category, Post
 from rest_framework.response import Response
@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializer import PostSerializer
 from rest_framework.permissions import IsAuthenticated
+from post.post import post_category_user
 
 
 class CategoriaListAPIView(ListAPIView):
@@ -14,28 +15,28 @@ class CategoriaListAPIView(ListAPIView):
 
 class CategoryAPIView(APIView):
     def get(self, request, slug):
-        return Response({'categoria': slug}, status=status.HTTP_200_OK)
+        category = Category.objects.get(slug = slug)
+        post = Post.objects.filter(category = category)
+        postserializer = PostSerializer(post, many = True)
+
+        return Response(postserializer.data, status=status.HTTP_200_OK)
+
+
+class CategoryRetriveApiView(RetrieveAPIView):
+    serializer_class = ""
+
+    
+
 
 
 class PostAPIVIew(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
-        return Response({'bien' : 'hizo bien'}, status=status.HTTP_200_OK)
+        return Response({'Informacion' : 'haz cargado el metodo get correctamente'}, status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
-        data = {
-            'author' : request.user.id,
-            'title' : request.data['title'],
-            'description' : request.data['description'],
-            'category' : request.data['category']
-        }
-        imagenes = request.data['image']
-        post_serializer = PostSerializer(data=data)
-        if post_serializer.is_valid():
-            post_serializer.save()
+        return post_category_user(self, request, *args, **kwargs)        
             #buscarpost = Post.objects.get(author = request.user.id, title = request.data['title'])
             #print(buscarpost)
-            return Response({
-            }, status=status.HTTP_201_CREATED)
-        return Response({'bien':'no errores'}, status=status.HTTP_200_OK)
+        
 
 

@@ -22,7 +22,7 @@ class Post(models.Model):
     description = models.TextField(null=True, max_length=255)
     post_created = models.DateTimeField(auto_now_add=True)
 
-    slug = models.SlugField(blank=True, null=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return '{} by {}'.format(self.title, self.author.username)
@@ -38,7 +38,7 @@ class Post(models.Model):
 
 class PostImgs(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    images = models.CharField(max_length=400)
+    image = models.CharField(max_length=400)
 
 
 
@@ -65,10 +65,10 @@ class CommentLike(models.Model):
 
 
 
-def add_post_slug(sender, instance, created,  **kwargs):
-    if created:
-        post_created = datetime.datetime.now()
-        slug_post = Post.objects.get(id = instance.id)
-        slug_post.slug = 'post/{}{}'.format(instance.author.username, str(post_created).replace('-','').replace(' ', '').replace('.', '').replace(':', ''))
-        slug_post.save()
-post_save.connect(add_post_slug, Post)
+# def add_post_slug(sender, instance, created,  **kwargs):
+#     if created:
+#         post_created = datetime.datetime.now()
+#         slug_post = Post.objects.get(id = instance.id)
+#         slug_post.slug = 'post/{}{}'.format(instance.author.username, str(post_created).replace('-','').replace(' ', '').replace('.', '').replace(':', ''))
+#         slug_post.save()
+# post_save.connect(add_post_slug, Post)
