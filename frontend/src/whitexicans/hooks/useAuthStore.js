@@ -24,12 +24,15 @@ export const useAuthStore = () => {
             localStorage.setItem('token', resp.data.access);
             localStorage.setItem('token-init-date', decoded.exp);
             localStorage.setItem('refresh', resp.data.refresh)
-            const profile = `http://127.0.0.1:8000/${slug}`;
-            const respuesta = await fetch(profile);
-            const data = await respuesta.json();
-            const { follows, posts } = data;
 
-            login(access, username, user_id, slug, follows, posts);
+            const profile = `http://127.0.0.1:8000/${slug}`;
+            const respuesta = await axios.get(profile,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers);
+            
         } catch (error) {
             console.log(error)
             localStorage.clear();

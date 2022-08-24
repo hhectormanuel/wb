@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
         dispatch(action);
     };
 
-    const login = (access, username, user_id, slug, follows, posts) => {
+    const login = (access, username, user_id, slug, follows, posts, followers) => {
         const user = {
             status: 'auth',
             id: user_id,
@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
             access: access,
             slug: slug,
             follows: follows,
+            followers: followers,
             posts: posts,
         };
         const action = {
@@ -88,11 +89,12 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('refresh', refresh);
 
             const profile = `http://127.0.0.1:8000/${slug}`;
-            const respuesta = await fetch(profile);
-            const data = await respuesta.json();
-            const { follows, posts } = data;
-            console.log(respuesta)
-            login(access, username, user_id, slug, follows, posts);
+            const respuesta = await axios.get(profile,{
+                headers: {
+                    'Authorization': `Bearer ${access}`
+                }
+            });
+            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers);
           } catch (error) {
             logout();
             if(error.response?.data.detail === 'No active account found with the given credentials')

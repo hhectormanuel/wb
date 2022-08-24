@@ -39,13 +39,18 @@ export const CreateProvider = ({ children }) => {
     };
 
     const getCategory = async() => {
+        const token = localStorage.getItem('token');
+        if(!token) return;
         const url = 'http://127.0.0.1:8000/category/';
-        const resp = await fetch(url);
-        const data = await resp.json();
-        setCategorias({
-            data: data,
-            isLoading: false
+        const resp = await axios.get(url,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         });
+          setCategorias({
+             data: resp.data,
+             isLoading: false
+         });
     }
 
     useEffect(() => {
@@ -95,7 +100,7 @@ export const CreateProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       const url = 'http://localhost:8000/post/';
       try {
-        const resp = await axios.post(url, { title: titulo, description: descripcion, category: categoria, image: ['hola']  },{
+        const resp = await axios.post(url, { title: titulo, description: descripcion, category: categoria, image: Photos  },{
           headers:{
             'Authorization': `Bearer ${token}`
            } 

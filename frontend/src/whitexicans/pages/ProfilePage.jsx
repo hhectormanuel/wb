@@ -94,20 +94,19 @@ export const ProfilePage = () => {
               {/* my-5 */}
                 <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
                 <h1 className="text-dark fs-3 fw-bolder">@{ user.username }</h1>
-                {/* <p class="text-white-50 mb-0">Landing Page Template</p> */}
             </div>
         </div>
             <Box sx={{ flexGrow: 1, mb: 5 }}>
       <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
         <Toolbar>
         <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-          <PostAddIcon/>{ user.posts.length }
+          <PostAddIcon/>{ user?.posts.length }
           </Typography>
           <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-              <PeopleAltIcon/>{ user.follows.length }
+              <PeopleAltIcon/>{ user?.follows.length }
           </Typography>
           <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-          <GroupAddIcon/>{ user.posts.length }
+          <GroupAddIcon/>{ user.followers.length }
           </Typography>
         </Toolbar>
       </AppBar>
@@ -247,13 +246,19 @@ export const ProfilePage = () => {
       title={ post.author_username }
       subheader={ post.category_name }
     />
-    <CardMedia
-      component="img"
-      height="194"
-      // image="https://upload.wikimedia.org/wikipedia/commons/c/c7/Portrait_of_an_Iguana.jpg"
-      image={post.images[0]}
-      alt="Paella dish"
-    />
+    {
+      post.images.length === 0
+      ? null
+      :(
+        <CardMedia
+        component="img"
+        height="194"
+        image={post.images[0]}
+        alt={post.author_username}
+      />
+      )
+    }
+
     <CardContent>
     <Typography variant="h6" color="text.secondary">
       { post.title }
