@@ -4,3 +4,8 @@
   font-family: 'Secular One';
   font-size: 40px;
 }
+
+.portadaPerfil{
+  background-image: url('https://source.unsplash.com/wfh8dDlNFOk/1600x900');
+  background-repeat: no-repeat;
+}

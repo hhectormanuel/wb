@@ -4,10 +4,15 @@ import React, { useMemo } from 'react'
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../auth/context/AuthContext';
+import { CreateContext } from '../../whitexicans/context/CreateContex';
 
 export const SideBarItem = ({ nombre, icon, id }) => {
 
   const { logout, openModal, setOpenModal, user } = useContext(AuthContext);
+
+  const { Publicacion } = useContext(CreateContext);
+
+  const isSavingPost = useMemo( () => Publicacion.isSaving === true );
 
   const navigate = useNavigate();
 
@@ -21,17 +26,16 @@ export const SideBarItem = ({ nombre, icon, id }) => {
     else if(id === 5){
       navigate(`/perfil/${ user.slug }`)
     }
-
-  }
-
-  const onCreatePublication = (id) => {
+    else if( id === 1 ){
+      navigate('/')
+    }
 
   }
 
   return (
     <ListItem onClick={ ()=>onClickSideBar(id) } disablePadding>
     <ListItemButton>
-        <ListItemIcon>
+        <ListItemIcon disabled={isSavingPost}>
             {icon}
         </ListItemIcon>
         <Grid container>

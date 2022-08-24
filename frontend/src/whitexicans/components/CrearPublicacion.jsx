@@ -1,6 +1,6 @@
 import { SaveOutlined } from '@mui/icons-material'
 import { Avatar, Button, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useScreenSize } from '../hooks/useScreenSize';
 import SendIcon from '@mui/icons-material/Send';
 import { Box } from '@mui/system';
@@ -10,6 +10,7 @@ import { AuthContext } from '../../auth/context/AuthContext';
 import { useState } from 'react';
 import { useForm } from '../hooks/useForm';
 import { CreateContext } from '../context/CreateContex';
+import Swal from 'sweetalert2'
 
 const formData = {
   Titulo: '',
@@ -20,12 +21,13 @@ export const CrearPublicacion = () => {
 
   const { Titulo, Descripcion, onInputChange } = useForm(formData);
 
-  const [Cat, setCat] = useState();
+  const [Cat, setCat] = useState('');
 
   const { openModal, setOpenModal } = useContext(AuthContext);
 
-  const { createPublication, Categorias } = useContext(CreateContext);
-  console.log(Categorias)
+  const { createPublication, Categorias, Publicacion, Photos, startUploadingFiles } = useContext(CreateContext);
+
+  const isSavingPost = useMemo( () => Publicacion.isSaving === true );
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
@@ -35,7 +37,14 @@ export const CrearPublicacion = () => {
 
     const onNewPublication = (e) => {
       e.preventDefault();
-      console.log(Titulo, Descripcion, Cat);
+      createPublication(Titulo, Descripcion, Cat);
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicado',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      setOpenModal(false);
     }
 
     const inputRef = useRef();
@@ -65,6 +74,15 @@ export const CrearPublicacion = () => {
         p: 4,
       };
 
+      const handleChange = event => {
+        setCat(event.target.value);
+      };
+
+      const onFileInputChange = (e) => {
+        if(e.target.files === 0) return;
+        startUploadingFiles(e.target.files)
+      }
+
   return (
     <Grid container sx={{ mt: 3 }} spacing={0} direction="column" alignItems="center" justify="center">
     <Grid className='animate__animated animate__fadeIn' container direction='row' justify="center" alignItems='center' sx={{ mb: 1, maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }` }}>
@@ -76,7 +94,8 @@ export const CrearPublicacion = () => {
     </Grid> */}
 
     <Grid container>
-    <TextField 
+    <TextField
+            disabled={isSavingPost}
             onClick={handleOpen}
             readOnly
             variant="filled"
@@ -135,20 +154,23 @@ export const CrearPublicacion = () => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Age"
+
+              onChange={ handleChange }
+              value={Cat}
             >
               {
               Categorias.data.map(categoria=>
-                <MenuItem value={ Cat } key={ categoria.category_name } onChange={ (e)=>setCat(e.target.value) } >{ categoria.category_name }</MenuItem>
+                <MenuItem value={ categoria.id} key={ categoria.id }  >{ categoria.category_name }</MenuItem>
                 )
             }
             </Select>
             </Grid>   
 
-        <input type="file" ref={ inputRef } hidden />
+            <input type="file" multiple name='Imagen' onChange={onFileInputChange} ref={ inputRef } hidden />
                 <Box textAlign='center'>
                 <Button
+                disabled={ isSavingPost }
                 onClick={ ()=>inputRef.current.click() }
-                type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
@@ -156,11 +178,24 @@ export const CrearPublicacion = () => {
                 AGREGAR IMAGEN
               </Button>
               </Box>
+
+              <div className="text-center">
+              {
+                Photos.length === 0
+                ? null
+                :(
+                  Photos.map(Photo=>
+                    <img key={Photo} src={Photo} width='150'></img>
+                    )
+                )
+              }
+              </div>
         
                       <Button
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={ isSavingPost }
                 sx={{ mt: 3, mb: 2 }}
               >
                 PUBLICAR

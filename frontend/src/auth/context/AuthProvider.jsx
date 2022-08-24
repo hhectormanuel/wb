@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
             const respuesta = await fetch(profile);
             const data = await respuesta.json();
             const { follows, posts } = data;
-
+            console.log(respuesta)
             login(access, username, user_id, slug, follows, posts);
           } catch (error) {
             logout();
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
             logout();
             setError(error.response.data.username)
         }
-    }
+    };
  
   return (
     <AuthContext.Provider value={{ onStartLogin, logout, checkingAuth, login, error: error, user: user, onStartRegister, setError, openModal: openModal, setOpenModal }}>
