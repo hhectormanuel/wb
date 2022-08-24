@@ -29,12 +29,14 @@ export const AppRouter = () => {
       )
     }
 
+    else if(user.status === 'no-auth'){
     return(
       <Routes>
         <Route path="/auth/*" element={ <AuthRoutes /> } />
         <Route path='/*' element={<Navigate to='/auth/login'></Navigate>}></Route>
       </Routes>
     )
+    }
 
   // return (
   //   <Routes>

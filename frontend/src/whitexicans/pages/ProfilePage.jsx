@@ -16,6 +16,7 @@ import { useForm } from '../hooks/useForm'
 import { CreateContext } from '../context/CreateContex'
 import ImageIcon from '@mui/icons-material/Image';
 import Swal from 'sweetalert2'
+import { useParams } from 'react-router-dom'
 
 const formData = {
   Titulo: '',
@@ -26,6 +27,9 @@ const formData = {
 export const ProfilePage = () => {
 
     const { user } = useContext(AuthContext);
+
+    const { id } = useParams();
+    console.log(id)
 
     const { Titulo, Descripcion, onInputChange, Imagen } = useForm(formData);
 
@@ -228,6 +232,11 @@ export const ProfilePage = () => {
     </Grid>
 </Grid></Grid>
     {
+      user.posts.length === 0
+      ?(<div className="spinner-border" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>)
+    :(
        user.posts.map(post=>
     <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">
     <Grid item xs={3}></Grid>
@@ -278,6 +287,7 @@ export const ProfilePage = () => {
   </Card>
      </Grid>      
         )
+    )
     }
     </WhitexicansLayout>
   )
