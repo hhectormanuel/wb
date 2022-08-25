@@ -31,6 +31,8 @@ export const SideBarItem = ({ nombre, icon, id }) => {
     }
     else if(id === 3){
       navigate('/populars')
+    }else if(id === 4){
+      navigate('/follows')
     }
 
   }

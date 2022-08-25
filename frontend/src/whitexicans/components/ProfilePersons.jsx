@@ -149,9 +149,7 @@ export const ProfilePersons = () => {
 </Grid>
     {
         Informacion.isLoading
-        ? (<div className="spinner-border" role="status">
-        <span className="sr-only">Loading...</span>
-      </div>)
+        ? (null)
         :(
        Informacion.posts.map(post=>
     <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">

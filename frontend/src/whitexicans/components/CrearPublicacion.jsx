@@ -86,12 +86,6 @@ export const CrearPublicacion = () => {
   return (
     <Grid container sx={{ mt: 3 }} spacing={0} direction="column" alignItems="center" justify="center">
     <Grid className='animate__animated animate__fadeIn' container direction='row' justify="center" alignItems='center' sx={{ mb: 1, maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }` }}>
-    {/* <Grid item>
-        <Button color="primary" sx={{ padding: 2 }}>
-            <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
-            Guardar
-        </Button>
-    </Grid> */}
 
     <Grid container>
     <TextField
