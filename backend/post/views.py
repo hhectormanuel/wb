@@ -75,3 +75,7 @@ class SeguidosPostListView(ListAPIView):
         posts = FriendPost.iterador(follows, followUsers, followPosts)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
+
+
+class Postlikes():
+    pass

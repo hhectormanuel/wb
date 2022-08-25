@@ -20,9 +20,6 @@ def instancia(self, instance):
         array.append(img.image)
     return array
 
-def user_slug(self, instance):
-    user = UserExtend.objects.get(user = instance.user).slug
-
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:

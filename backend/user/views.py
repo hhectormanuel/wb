@@ -40,12 +40,7 @@ class SingUp(CreateAPIView):
 class PruebaListAPIView(ListAPIView):
     serializer_class = UserSerializer
     queryset = serializer_class.Meta.model.objects.all()
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        user = request.user
-        serializer = UserSerializer(User.objects.all(), many=True)
-        return Response(serializer.data)
+    #permission_classes = (IsAuthenticated,)
 
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
@@ -58,14 +53,34 @@ class ProfileAPIView(APIView):
     def get(self, request, slug, *args, **kwargs):
         userExtend = UserExtend.objects.get(slug = slug)
         serializer = UserExtendSerializer(userExtend)
+        follows = []
+        followers = []
+        for follow in serializer.data.get('follows'):
+            followuser = User.objects.get(id = follow)
+            user ={
+                'id' : followuser.id,
+                'username': followuser.username,
+                'username_slug' : UserExtend.objects.get(user = followuser).slug
+            }
+            follows.append(user)
+
+        for follower in serializer.data.get('followers'):
+            followuser = User.objects.get(id = follower)
+            user ={
+                'id' : followuser.id,
+                'username': followuser.username,
+                'username_slug' : UserExtend.objects.get(user = followuser).slug
+            }
+            followers.append(user)
+        print(followers)
         userSerializer = UserSerializer(User.objects.get(id = serializer.data.get('user')))
         posts = PostSerializer(Post.objects.filter(author = userExtend.user), many=True)
         return Response({
             'name':serializer.data.get('name'),
             'profile_img' : serializer.data.get('profile_image'),
             'account_created': serializer.data.get('account_created'),
-            'follows': serializer.data.get('follows'),
-            'followers' : serializer.data.get('followers'),
+            'follows': follows,
+            'followers' : followers,
             'user' : userSerializer.data,
             'posts' : posts.data,
         }, status=status.HTTP_200_OK)

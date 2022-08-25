@@ -16,7 +16,6 @@ def post_category_user(self, request, *args, **kwargs):
             'slug' : slug
         }
     images = request.data['image']
-    #img = ['https://i.blogs.es/860ee9/togg4-1-/840_560.jpg', 'https://www.chevrolet.com.mx/content/dam/chevrolet/na/mx/es/index/performance/2022-camaro-coupe/colorizer/jellys/01-images/red-hot.jpg?imwidth=960']
     post_serializer = PostSerializer(data=data)
     if post_serializer.is_valid():
         post_serializer.save()
