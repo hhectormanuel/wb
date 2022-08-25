@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from django.contrib.auth.models import User
 from .models import UserExtend
+from .follow import Follow_followers
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -53,34 +54,14 @@ class ProfileAPIView(APIView):
     def get(self, request, slug, *args, **kwargs):
         userExtend = UserExtend.objects.get(slug = slug)
         serializer = UserExtendSerializer(userExtend)
-        follows = []
-        followers = []
-        for follow in serializer.data.get('follows'):
-            followuser = User.objects.get(id = follow)
-            user ={
-                'id' : followuser.id,
-                'username': followuser.username,
-                'username_slug' : UserExtend.objects.get(user = followuser).slug
-            }
-            follows.append(user)
-
-        for follower in serializer.data.get('followers'):
-            followuser = User.objects.get(id = follower)
-            user ={
-                'id' : followuser.id,
-                'username': followuser.username,
-                'username_slug' : UserExtend.objects.get(user = followuser).slug
-            }
-            followers.append(user)
-        print(followers)
         userSerializer = UserSerializer(User.objects.get(id = serializer.data.get('user')))
         posts = PostSerializer(Post.objects.filter(author = userExtend.user), many=True)
         return Response({
             'name':serializer.data.get('name'),
             'profile_img' : serializer.data.get('profile_image'),
             'account_created': serializer.data.get('account_created'),
-            'follows': follows,
-            'followers' : followers,
+            'follows': Follow_followers.follow(serializer),
+            'followers' : Follow_followers.follower(serializer),
             'user' : userSerializer.data,
             'posts' : posts.data,
         }, status=status.HTTP_200_OK)
