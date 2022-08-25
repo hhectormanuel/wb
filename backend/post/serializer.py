@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from user.models import UserExtend
 from .models import Category, Post, PostImgs
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -18,6 +20,10 @@ def instancia(self, instance):
         array.append(img.image)
     return array
 
+def user_slug(self, instance):
+    user = UserExtend.objects.get(user = instance.user).slug
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -34,6 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
             'slug' : instance.slug,
             'author_id': instance.author.id,
             'author_username': instance.author.username,
+            'author_slug': UserExtend.objects.get(user = instance.author).slug,
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
             'images': instancia(self, instance)
