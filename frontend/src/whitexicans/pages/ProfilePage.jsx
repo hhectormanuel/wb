@@ -46,18 +46,18 @@ export const ProfilePage = () => {
           </div>
         </div>
 
-        <Box sx={{ flexGrow: 1, mb: 5 }}>
+        <Box sx={{ flexGrow: 1, mb: 5, ml: 5 }}>
           <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
             <Toolbar>
             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-              <PostAddIcon/>{ user?.posts.length }
+              <PostAddIcon/>{ user?.posts?.length }
               </Typography>
               <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black', mt: 1 }}>
-                  { user?.follows.length }
+                  { user?.follows?.length }
                   <ModalFollows/>
               </Typography>
               <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black', mt: 1 }}>
-              { user.followers.length }
+              { user.followers?.length }
               <ModalFollowers/>
               </Typography>
             </Toolbar>

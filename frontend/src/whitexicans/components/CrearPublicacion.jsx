@@ -1,5 +1,5 @@
 import { SaveOutlined } from '@mui/icons-material'
-import { Avatar, Button, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
+import { Avatar, Button, CircularProgress, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
 import React, { useMemo, useRef } from 'react'
 import { useScreenSize } from '../hooks/useScreenSize';
 import SendIcon from '@mui/icons-material/Send';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from '../hooks/useForm';
 import { CreateContext } from '../context/CreateContex';
 import Swal from 'sweetalert2'
+import { LoadingThink } from '../../UI/LoadingThink';
 
 const formData = {
   Titulo: '',
@@ -153,8 +154,12 @@ export const CrearPublicacion = () => {
               value={Cat}
             >
               {
+                Categorias.isLoading
+                ? <LoadingThink/>
+                :(
               Categorias.data.map(categoria=>
                 <MenuItem value={ categoria.id} key={ categoria.id }  >{ categoria.category_name }</MenuItem>
+                )
                 )
             }
             </Select>

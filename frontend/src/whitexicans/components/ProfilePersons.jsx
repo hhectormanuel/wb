@@ -16,6 +16,7 @@ import { useScreenSize } from '../hooks/useScreenSize';
 import { useContext } from 'react';
 import { AuthContext } from '../../auth/context/AuthContext';
 import { ConstructionOutlined } from '@mui/icons-material';
+import { LoadingThink } from '../../UI/LoadingThink';
 
 export const ProfilePersons = () => {
 
@@ -111,36 +112,37 @@ export const ProfilePersons = () => {
 
   return (
     <WhitexicansLayout>
-<div className="py-5 bg-image-full" style={{ backgroundImage: `url("https://static.depositphotos.com/storage/portfolio-cover/387/3922387.jpg?1593139829")`, width: '100%'}}>
-            <div className="text-center">
-              {/* my-5 */}
-                <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
-                <h1 className="text-dark fs-3 fw-bolder">@{ Informacion.nombre }</h1>
+
                 {
                     Informacion.isLoading
-                    ?(<div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>)
-                    :<button onClick={onFollowUser} className='btn btn-light fw-bold'>{ Valor }</button>
-                }
-
-            </div>
-        </div>
-            <Box sx={{ flexGrow: 1, mb: 5 }}>
-      <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
-        <Toolbar>
-        <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-          <PostAddIcon/>{ Informacion?.posts.length }
-          </Typography>
-          <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-              <PeopleAltIcon/>{ Informacion?.follows.length }
-          </Typography>
-          <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-          <GroupAddIcon/>{ Informacion.followers.length }
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
+                    ?(<LoadingThink/>)
+                    :(
+                      <div>
+                      <div className="py-5 bg-image-full" style={{ backgroundImage: `url("https://static.depositphotos.com/storage/portfolio-cover/387/3922387.jpg?1593139829")`, width: '100%'}}>
+                        <div className="text-center">
+                        <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
+                        <h1 className="text-dark fs-3 fw-bolder">@{ Informacion.nombre }</h1>
+                        <button onClick={onFollowUser} className='btn btn-light fw-bold'>{ Valor }</button>
+                        </div>
+                      </div>
+                         <Box sx={{ flexGrow: 1, mb: 5 }}>
+                         <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
+                          <Toolbar>
+                           <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
+                            <PostAddIcon/>{ Informacion?.posts.length }
+                             </Typography>
+                             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
+                                 <PeopleAltIcon/>{ Informacion?.follows.length }
+                            </Typography>
+                             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
+                            <GroupAddIcon/>{ Informacion.followers.length }
+                             </Typography>
+                          </Toolbar>
+                        </AppBar>
+                      </Box>
+                      </div>
+                     )
+                  }
 
     <Grid container sx={{ mt: 3 }} spacing={0} direction="column" alignItems="center" justify="center">
     <Grid className='animate__animated animate__fadeIn' container direction='row' justify="center" alignItems='center' sx={{ mb: 1, maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }` }}>
@@ -149,7 +151,7 @@ export const ProfilePersons = () => {
 </Grid>
     {
         Informacion.isLoading
-        ? (null)
+        ? (<LoadingThink/>)
         :(
        Informacion.posts.map(post=>
     <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">
@@ -158,7 +160,7 @@ export const ProfilePersons = () => {
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="recipe">
-          R
+          { user.username.charAt(0) }
         </Avatar>
       }
       action={

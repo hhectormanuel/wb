@@ -38,7 +38,6 @@ export const ModalFollowers = () => {
         >
         <Box sx={{ ...style, width: 400 }}>
             <h5 className='text-center' id="parent-modal-title">Seguidores</h5><hr />
-            <p id="parent-modal-description">
             {
                 user.followers.length === 0
                 ? null
@@ -48,7 +47,6 @@ export const ModalFollowers = () => {
                         )
                 )
             }
-            </p>
         </Box>
         </Modal>
     </div>
