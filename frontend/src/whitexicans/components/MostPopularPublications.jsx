@@ -1,4 +1,4 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material'
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material'
 import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
@@ -11,13 +11,17 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { useContext } from 'react';
 import { AuthContext } from '../../auth/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const MostPopularPublications = () => {
+
+  const { user } = useContext(AuthContext);
   
   const { width, height } = useScreenSize();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const navigate = useNavigate();
   const [Posts, setPosts] = useState({
     data: [],
     isLoading: true
@@ -57,11 +61,19 @@ export const MostPopularPublications = () => {
 
     useEffect(() => {
       getMostPopularPublications();
-    }, []);   
+    }, []);  
+    
+    const onClickUser = (author) => {
+      if(author === user.slug){
+        navigate(`/perfil/${ user.slug }`)
+        return;
+      }
+      navigate(`/view/${author}`);
+    }
 
   return (
     <WhitexicansLayout>
-    <Typography align="center" component="h1" variant={ open ? 'h5' : 'h6' } sx={{ mt: 2, ml: `${ open ? '0px' : '40px'}` }}>
+    <Typography align="center" component="h1" variant={ open ? 'h5' : 'h6' } sx={{ ml: `${ open ? '0px' : '40px'}`, mt: 5 }}>
               PUBLICACIONES MÁS POPULARES
             </Typography>
 
@@ -80,18 +92,17 @@ export const MostPopularPublications = () => {
         </Avatar>
       }
       action={
-        <IconButton aria-label="settings">
-          <MoreVertIcon />
-        </IconButton>
+        <Box sx={{mr: 50}}>
+          <Button size='small' sx={{ color: 'black' }} onClick={ () => onClickUser(post.author_slug) }>{post.author_username}</Button>
+          <Typography sx={{ fontSize: 13 }} color='gray'>{post.category_name}</Typography>
+        </Box>
       }
-      title={ post.author_username }
-      subheader={ post.category_name }
     />
     {
       post.images.length === 0
       ? null
       :(
-        <CardMedia
+        <CardMedia 
         component="img"
         height="194"
         image={post.images[0]}

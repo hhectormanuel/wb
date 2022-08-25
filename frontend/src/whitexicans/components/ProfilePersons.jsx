@@ -76,7 +76,7 @@ export const ProfilePersons = () => {
 
       const getRespFollow = async() => {
         if(Informacion.isLoading === false){
-            const search = Informacion.followers.find(follower=>follower === user.id);
+            const search = Informacion.followers.find(follower=>follower.id === user.id);
             if(search){
                 setValor('Siguiendo');
                 getInfo();
@@ -86,6 +86,7 @@ export const ProfilePersons = () => {
             }
       }
     };
+
 
     useEffect(() => {
         getRespFollow();

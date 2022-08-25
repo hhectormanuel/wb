@@ -1,12 +1,15 @@
-import { Button, Modal } from '@mui/material'
+import { Avatar, Button, Modal } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../../auth/context/AuthContext'
 
 export const ModalFollows = () => {
 
     const { user } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     const style = {
         position: 'absolute',
@@ -28,6 +31,10 @@ export const ModalFollows = () => {
       setOpen(false);
     };
 
+    const onClickUser = (slug) => {
+      navigate(`/view/${ slug }`)
+    }
+
   return (
     <div>
         <Button sx={{ color:'black' }} onClick={handleOpen}>Seguidos</Button>
@@ -44,7 +51,12 @@ export const ModalFollows = () => {
                 ? null
                 : (
                     user.follows.map(follow=>
-                            <h5 key={follow}>{follow}</h5>
+                      <div key={follow.id} className="d-flex align-items-center justify-content-center">
+                      <img className="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
+                      <button onClick={()=>onClickUser(follow.username_slug)} className="fw-bold btn btn-light">
+                          { follow.username }
+                      </button>
+                  </div>
                         )
                 )
             }

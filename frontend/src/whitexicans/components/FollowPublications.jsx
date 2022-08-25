@@ -1,6 +1,6 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material'
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material'
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useEffect } from 'react';
 import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import { useScreenSize } from '../hooks/useScreenSize';
@@ -8,13 +8,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { LoadingThink } from '../../UI/LoadingThink';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../auth/context/AuthContext';
+import { Box } from '@mui/system';
 
 export const FollowPublications = () => {
+  
+  const { user } = useContext(AuthContext);
 
   const { width, height } = useScreenSize();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const navigate = useNavigate();
   const [Posts, setPosts] = useState({
     data: [],
     isLoading: true
@@ -56,10 +62,17 @@ export const FollowPublications = () => {
     getFollowsPublications();
   }, []);
   
+  const onClickUser = (author) => {
+    if(author === user.slug){
+      navigate(`/perfil/${ user.slug }`)
+      return;
+    }
+    navigate(`/view/${author}`);
+  }
 
   return (
     <WhitexicansLayout>
-    <Typography align="center" component="h1" variant={ open ? 'h5' : 'h6' } sx={{ mt: 2, ml: `${ open ? '0px' : '40px'}` }}>
+    <Typography align="center" component="h1" variant={ open ? 'h5' : 'h6' } sx={{ml: `${ open ? '0px' : '40px'}`, mt: 5 }}>
               PUBLICACIONES DE SEGUIDOS
             </Typography>
 
@@ -78,12 +91,12 @@ export const FollowPublications = () => {
         </Avatar>
       }
       action={
-        <IconButton aria-label="settings">
-          <MoreVertIcon />
-        </IconButton>
+        <Box sx={{mr: 50}}>
+          <Button size='small' sx={{ color: 'black' }} onClick={ () => onClickUser(post.author_slug) }>{post.author_username}</Button>
+          <Typography sx={{ fontSize: 13 }} color='gray'>{post.category_name}</Typography>
+        </Box>
       }
-      title={ post.author_username }
-      subheader={ post.category_name }
+
     />
     {
       post.images.length === 0
