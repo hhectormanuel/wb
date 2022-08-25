@@ -105,7 +105,6 @@ export const CreateProvider = ({ children }) => {
             'Authorization': `Bearer ${token}`
            } 
         });
-        console.log(resp)
       } catch (error) {
         console.log(error)
       }

@@ -17,6 +17,9 @@ import { useContext } from 'react';
 import { AuthContext } from '../../auth/context/AuthContext';
 import { ConstructionOutlined } from '@mui/icons-material';
 import { LoadingThink } from '../../UI/LoadingThink';
+import { ModalPhotos } from './ModalPhotos';
+import { LikesModal } from './LikesModal';
+import { ModalComments } from './ModalComments';
 
 export const ProfilePersons = () => {
 
@@ -176,12 +179,13 @@ export const ProfilePersons = () => {
       post.images.length === 0
       ? null
       :(
-        <CardMedia
-        component="img"
-        height="194"
-        image={post.images[0]}
-        alt={post.author_username}
-      />
+      //   <CardMedia
+      //   component="img"
+      //   height="194"
+      //   image={post.images[0]}
+      //   alt={post.author_username}
+      // />
+      <ModalPhotos imagenes={post.images}/>
       )
     }
 
@@ -197,9 +201,7 @@ export const ProfilePersons = () => {
       <IconButton aria-label="add to favorites">
         <FavoriteIcon />
       </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon />
-      </IconButton>
+      <LikesModal post={post} /><ModalComments/>
     </CardActions>
   </Card>
      </Grid>      

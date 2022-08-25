@@ -13,6 +13,9 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { CrearPublicacion } from '../components/CrearPublicacion'
 import { ModalFollows } from './components/ModalFollows'
 import { ModalFollowers } from './components/ModalFollowers'
+import { ModalPhotos } from '../components/ModalPhotos'
+import { LikesModal } from '../components/LikesModal'
+import { ModalComments } from '../components/ModalComments'
 
 export const ProfilePage = () => {
 
@@ -92,12 +95,11 @@ export const ProfilePage = () => {
             post.images.length === 0
             ? null
             :(
-              <CardMedia
-              component="img"
-              height="194"
-              image={post.images[0]}
-              alt={post.author_username}
-            />
+              <ModalPhotos imagenes={post.images}/>
+              // component="img"
+              // height="194"
+              // image={post.images[0]}
+              // alt={post.author_username}
             )
           }
 
@@ -113,9 +115,7 @@ export const ProfilePage = () => {
               <IconButton aria-label="add to favorites">
                 <FavoriteIcon />
               </IconButton>
-              <IconButton aria-label="share">
-                <ShareIcon />
-              </IconButton>
+              <LikesModal post={post} /><ModalComments/>
             </CardActions>
           </Card>
         </Grid>      

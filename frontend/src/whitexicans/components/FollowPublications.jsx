@@ -11,6 +11,9 @@ import { LoadingThink } from '../../UI/LoadingThink';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../auth/context/AuthContext';
 import { Box } from '@mui/system';
+import { ModalPhotos } from './ModalPhotos';
+import { LikesModal } from './LikesModal';
+import { ModalComments } from './ModalComments';
 
 export const FollowPublications = () => {
   
@@ -102,12 +105,13 @@ export const FollowPublications = () => {
       post.images.length === 0
       ? null
       :(
-        <CardMedia
-        component="img"
-        height="194"
-        image={post.images[0]}
-        alt={post.author_username}
-      />
+      //   <CardMedia
+      //   component="img"
+      //   height="194"
+      //   image={post.images[0]}
+      //   alt={post.author_username}
+      // />
+      <ModalPhotos imagenes={post.images}/>
       )
     }
 
@@ -123,9 +127,7 @@ export const FollowPublications = () => {
       <IconButton aria-label="add to favorites">
         <FavoriteIcon />
       </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon />
-      </IconButton>
+      <LikesModal post={post} /><ModalComments/>
     </CardActions>
   </Card>
      </Grid>      

@@ -12,6 +12,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import { useContext } from 'react';
 import { AuthContext } from '../../auth/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { ModalPhotos } from './ModalPhotos';
+import { LikesModal } from './LikesModal';
+import { ModalComments } from './ModalComments';
 
 export const MostPopularPublications = () => {
 
@@ -102,12 +105,13 @@ export const MostPopularPublications = () => {
       post.images.length === 0
       ? null
       :(
-        <CardMedia 
-        component="img"
-        height="194"
-        image={post.images[0]}
-        alt={post.author_username}
-      />
+      //   <CardMedia 
+      //   component="img"
+      //   height="194"
+      //   image={post.images[0]}
+      //   alt={post.author_username}
+      // />
+      <ModalPhotos imagenes={post.images}/>
       )
     }
 
@@ -123,9 +127,7 @@ export const MostPopularPublications = () => {
       <IconButton aria-label="add to favorites">
         <FavoriteIcon />
       </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon />
-      </IconButton>
+      <LikesModal post={post} /><ModalComments/>
     </CardActions>
   </Card>
      </Grid>      
