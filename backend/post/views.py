@@ -1,4 +1,6 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+
+from user.models import UserExtend, User
 from .serializer import CategoriaSerializer
 from .models import Category, Post, PostLike
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from .serializer import PostSerializer
 from rest_framework.permissions import IsAuthenticated
 from post.post import post_category_user
 from datetime import datetime
+from post.followposts import Posts as FriendPost
 
 
 class CategoriaListAPIView(ListAPIView):
@@ -61,4 +64,14 @@ class PopularPostListView(ListAPIView):
                 if post[1] == most and post[0] not in array:
                     array.append(post[0])
         serializer = PostSerializer(array, many=True)
+        return Response(serializer.data)
+
+class SeguidosPostListView(ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def list(self, request, *args, **kwargs):
+        follows, followUsers, followPosts = FriendPost.get_data(self, request)
+        posts = FriendPost.iterador(follows, followUsers, followPosts)
+        serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
