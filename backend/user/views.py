@@ -78,7 +78,7 @@ class ProfileAPIView(APIView):
 
 ##vista para hacer follow/unfollow
 class FollowAPIView(APIView):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     def post(self, request, slug, *args, **kwargs):
         user = request.user
         myUser = UserExtend.objects.get(user = user)

@@ -21,7 +21,7 @@ def instancia(self, instance):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id', 'title', 'description', 'author', 'category', 'slug')
+        fields = ('id', 'title', 'description', 'author', 'category', 'slug', 'post_created')
     
 
     def to_representation(self, instance):
@@ -29,6 +29,8 @@ class PostSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'title': instance.title,
             'description': instance.description,
+            'post_created' : instance.post_created,
+            'post_likes' : instance.get_likes(),
             'slug' : instance.slug,
             'author_id': instance.author.id,
             'author_username': instance.author.username,
