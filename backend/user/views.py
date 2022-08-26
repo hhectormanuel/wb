@@ -55,7 +55,7 @@ class ProfileAPIView(APIView):
         userExtend = UserExtend.objects.get(slug = slug)
         serializer = UserExtendSerializer(userExtend)
         userSerializer = UserSerializer(User.objects.get(id = serializer.data.get('user')))
-        posts = PostSerializer(Post.objects.filter(author = userExtend.user), many=True)
+        posts = PostSerializer(Post.objects.filter(author = userExtend.user).order_by('-id'), many=True)
         return Response({
             'name':serializer.data.get('name'),
             'profile_img' : serializer.data.get('profile_image'),

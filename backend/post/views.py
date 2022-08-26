@@ -47,11 +47,12 @@ from datetime import timedelta
 timedelta(days=7)
 
 class PopularPostListView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def list(self, request):
-        week = datetime.now()-timedelta(hours=5)
+        week = datetime.now()-timedelta(days=7)
         recents = Post.objects.filter(post_created__gt=week)
         likes = []
         posts = []
@@ -68,6 +69,7 @@ class PopularPostListView(ListAPIView):
         return Response(serializer.data)
 
 class SeguidosPostListView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -79,7 +81,9 @@ class SeguidosPostListView(ListAPIView):
 
 
 class Postlikes(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = PostLikesSerializer
+    
 
     def post(self, request, slug):
         post = Post.objects.get(slug = slug)
