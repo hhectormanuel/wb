@@ -20,7 +20,7 @@ export const Index = () => {
     <>
     <WhitexicansLayout>
       <CrearPublicacion/>
-        <Publicaciones/>
+
     </WhitexicansLayout>
     </>
     )

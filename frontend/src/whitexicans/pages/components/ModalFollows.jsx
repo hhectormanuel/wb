@@ -4,6 +4,7 @@ import React from 'react'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../../auth/context/AuthContext'
+import { LoadingThink } from '../../../UI/LoadingThink'
 
 export const ModalFollows = () => {
 
@@ -47,8 +48,8 @@ export const ModalFollows = () => {
         <Box sx={{ ...style, width: 400 }}>
             <h5 className='text-center' id="parent-modal-title">Seguidos</h5><hr />
             {
-                user.follows.length === 0
-                ? null
+                user.follows === undefined
+                ? <LoadingThink/>
                 : (
                     user.follows.map(follow=>
                       <div key={follow.id} className="d-flex align-items-center justify-content-center">

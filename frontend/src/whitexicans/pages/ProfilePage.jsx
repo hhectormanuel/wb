@@ -16,10 +16,22 @@ import { ModalFollowers } from './components/ModalFollowers'
 import { ModalPhotos } from '../components/ModalPhotos'
 import { LikesModal } from '../components/LikesModal'
 import { ModalComments } from '../components/ModalComments'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { Publicaciones } from '../components/Publicaciones'
+import { usePost } from '../hooks/usePost'
+import { LoadingThink } from '../../UI/LoadingThink'
 
 export const ProfilePage = () => {
 
-    const { user } = useContext(AuthContext);
+    const { user, Data } = useContext(AuthContext);
+
+    const [UserInfo, setUserInfo] = useState({
+      posts: [],
+      followers: [],
+      follows: [],
+      isLoading: true
+    });
     
     const { width } = useScreenSize();
 
@@ -39,6 +51,24 @@ export const ProfilePage = () => {
         getSizeScreen();
       }, [width]);
 
+      const addInfo = () => {
+
+        if(user.followers !== undefined & user.follows !== undefined  & user.posts !== undefined ){
+          setUserInfo({
+            posts: user.posts,
+            followers: user.followers,
+            follows: user.follows,
+            isLoading: false
+          });
+        }
+      };
+
+      useEffect(() => {
+        addInfo();
+      }, []);
+      
+      
+
   return (
     <WhitexicansLayout>
 
@@ -49,79 +79,33 @@ export const ProfilePage = () => {
           </div>
         </div>
 
-        <Box sx={{ flexGrow: 1, mb: 5, ml: 5 }}>
+      {
+        UserInfo.isLoading
+        ? <LoadingThink/>
+        :(
+          <Box sx={{ flexGrow: 1, mb: 5, ml: 5 }}>
           <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
             <Toolbar>
             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-              <PostAddIcon/>{ user?.posts?.length }
+              <PostAddIcon/>{ UserInfo?.posts?.length }
               </Typography>
               <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black', mt: 1 }}>
-                  { user?.follows?.length }
+                  { UserInfo?.follows?.length }
                   <ModalFollows/>
               </Typography>
               <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black', mt: 1 }}>
-              { user.followers?.length }
+              { UserInfo.followers?.length }
               <ModalFollowers/>
               </Typography>
             </Toolbar>
           </AppBar>
         </Box>
+        )
+      }
 
         <CrearPublicacion/>
 
-    {
-      user.posts.length === 0
-      ?(null)
-    :(
-       user.posts.map(post=>
-    <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">
-    <Grid item xs={3}></Grid>
-      <Card sx={{ width: `${ open ? '450px' : '280px'}`, ml: `${ open ? '0px' : '40px' }`, mt: 5, mb: 3 }}>
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="recipe">
-               { user.username.charAt(0) }
-            </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={ post.author_username }
-            subheader={ post.category_name }
-          />
-          {
-            post.images.length === 0
-            ? null
-            :(
-              <ModalPhotos imagenes={post.images}/>
-              // component="img"
-              // height="194"
-              // image={post.images[0]}
-              // alt={post.author_username}
-            )
-          }
-
-            <CardContent>
-            <Typography variant="h6" color="text.secondary">
-                { post.title }
-              </Typography><br />
-              <Typography variant="body2" color="text.secondary">
-                { post.description }
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <LikesModal post={post} /><ModalComments/>
-            </CardActions>
-          </Card>
-        </Grid>      
-        )
-    )
-    }
+        <Publicaciones Informacion={Data} data={Data.info} />
     </WhitexicansLayout>
   )
 }

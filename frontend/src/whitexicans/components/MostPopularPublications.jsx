@@ -15,20 +15,21 @@ import { useNavigate } from 'react-router-dom';
 import { ModalPhotos } from './ModalPhotos';
 import { LikesModal } from './LikesModal';
 import { ModalComments } from './ModalComments';
+import { Publicaciones } from './Publicaciones';
 
 export const MostPopularPublications = () => {
 
-  const { user } = useContext(AuthContext);
+  const { user, Postss } = useContext(AuthContext);
   
   const { width, height } = useScreenSize();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
   const navigate = useNavigate();
-  const [Posts, setPosts] = useState({
-    data: [],
-    isLoading: true
-  });
+  // const [Posts, setPosts] = useState({
+  //   data: [],
+  //   isLoading: true
+  // });
 
   const getSizeScreen = () => {
       if(width >= 606) {
@@ -44,35 +45,29 @@ export const MostPopularPublications = () => {
       getSizeScreen();
     }, [width]);
 
-    const getMostPopularPublications = async() => {
-      const url = 'http://127.0.0.1:8000/post/popular/';
-      const token = localStorage.getItem('token');
-      try {
-        const resp = await axios.get(url,{
-          headers:{
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        setPosts({
-          data: resp.data,
-          isLoading: false
-        });
-      } catch (error) {
-        console.log(error)
-      }
-    };
+    // const getMostPopularPublications = async() => {
+    //   const url = 'http://127.0.0.1:8000/post/popular/';
+    //   const token = localStorage.getItem('token');
+    //   try {
+    //     const resp = await axios.get(url,{
+    //       headers:{
+    //         'Authorization': `Bearer ${token}`
+    //       }
+    //     });
+    //     setPosts({
+    //       data: resp.data,
+    //       isLoading: false
+    //     });
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // };
 
-    useEffect(() => {
-      getMostPopularPublications();
-    }, []);  
+    // useEffect(() => {
+    //   getMostPopularPublications();
+    // }, []);  
     
-    const onClickUser = (author) => {
-      if(author === user.slug){
-        navigate(`/perfil/${ user.slug }`)
-        return;
-      }
-      navigate(`/view/${author}`);
-    }
+    const { data } = Postss;
 
   return (
     <WhitexicansLayout>
@@ -80,59 +75,7 @@ export const MostPopularPublications = () => {
               PUBLICACIONES MÁS POPULARES
             </Typography>
 
-            {
-        Posts.isLoading
-        ? (<LoadingThink/>)
-        :(
-       Posts.data.map(post=>
-    <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">
-    <Grid item xs={3}></Grid>
-    <Card sx={{ width: `${ open ? '450px' : '280px'}`, ml: `${ open ? '0px' : '40px' }`, mt: 5, mb: 3 }}>
-    <CardHeader
-      avatar={
-        <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="recipe">
-          { post.author_username.charAt(0) }
-        </Avatar>
-      }
-      action={
-        <Box sx={{mr: 50}}>
-          <Button size='small' sx={{ color: 'black' }} onClick={ () => onClickUser(post.author_slug) }>{post.author_username}</Button>
-          <Typography sx={{ fontSize: 13 }} color='gray'>{post.category_name}</Typography>
-        </Box>
-      }
-    />
-    {
-      post.images.length === 0
-      ? null
-      :(
-      //   <CardMedia 
-      //   component="img"
-      //   height="194"
-      //   image={post.images[0]}
-      //   alt={post.author_username}
-      // />
-      <ModalPhotos imagenes={post.images}/>
-      )
-    }
-
-    <CardContent>
-    <Typography variant="h6" color="text.secondary">
-      { post.title }
-      </Typography><br />
-      <Typography variant="body2" color="text.secondary">
-      { post.description }
-      </Typography>
-    </CardContent>
-    <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
-        <FavoriteIcon />
-      </IconButton>
-      <LikesModal post={post} /><ModalComments/>
-    </CardActions>
-  </Card>
-     </Grid>      
-        ))
-    }
+            <Publicaciones Informacion={Postss} data={data} />
     </WhitexicansLayout>
   )
 }

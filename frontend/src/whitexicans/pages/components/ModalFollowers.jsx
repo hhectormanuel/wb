@@ -3,6 +3,7 @@ import { Box } from '@mui/system'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../auth/context/AuthContext';
+import { LoadingThink } from '../../../UI/LoadingThink';
 
 export const ModalFollowers = () => {
 
@@ -45,8 +46,8 @@ export const ModalFollowers = () => {
         <Box sx={{ ...style, width: 400 }}>
             <h5 className='text-center' id="parent-modal-title">Seguidores</h5><hr />
             {
-                user.followers.length === 0
-                ? null
+                user.followers === undefined
+                ? <LoadingThink/>
                 : (
                   user.followers.map(follower=>
                     <div key={follower.id} className="d-flex align-items-center justify-content-center">

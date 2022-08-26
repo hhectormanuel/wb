@@ -20,6 +20,8 @@ import { LoadingThink } from '../../UI/LoadingThink';
 import { ModalPhotos } from './ModalPhotos';
 import { LikesModal } from './LikesModal';
 import { ModalComments } from './ModalComments';
+import { Publicaciones } from './Publicaciones';
+import { usePost } from '../hooks/usePost';
 
 export const ProfilePersons = () => {
 
@@ -27,7 +29,9 @@ export const ProfilePersons = () => {
 
     const { user } = useContext(AuthContext);
 
-    const [Informacion, setInformacion] = useState({
+    // const {Info, Valor, onFollowUser, getInfo} = usePost(id);
+
+    const [Info, setInfo] = useState({
         nombre: '',
         followers: [],
         follows: [],
@@ -43,18 +47,19 @@ export const ProfilePersons = () => {
                 'Authorization': `Bearer ${token}`
             }
         });
-        setInformacion({
+        setInfo({
             nombre: respuesta.data.user.username,
             followers: respuesta.data.followers,
             follows: respuesta.data.follows,
             posts: respuesta.data.posts,
             isLoading: false
         });
-    }
+    };
 
     useEffect(() => {
-      getInfo()
+      getInfo();
     }, []);
+    
 
     const { width, height } = useScreenSize();
     const [open, setOpen] = React.useState(false);
@@ -78,8 +83,8 @@ export const ProfilePersons = () => {
       const [Valor, setValor] = useState('Seguir');
 
       const getRespFollow = async() => {
-        if(Informacion.isLoading === false){
-            const search = Informacion.followers.find(follower=>follower.id === user.id);
+        if(Info.isLoading === false){
+            const search = Info.followers.find(follower=>follower.id === user.id);
             if(search){
                 setValor('Siguiendo');
                 getInfo();
@@ -90,10 +95,9 @@ export const ProfilePersons = () => {
       }
     };
 
-
     useEffect(() => {
         getRespFollow();
-      }, [Informacion.isLoading]);
+      }, [Info.isLoading]);
     
       const onFollowUser = async() => {
         const url = `http://127.0.0.1:8000/follow/${id}`;
@@ -112,20 +116,32 @@ export const ProfilePersons = () => {
             setValor('Siguiendo');
         }
       };
-      
+
+    const putLike = async(slug) => {
+      const url = `http://127.0.0.1:8000/like/${slug}`;
+      const token = localStorage.getItem('token');
+      const resp = await axios.post(url,{
+
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+        getInfo();
+    };
 
   return (
     <WhitexicansLayout>
 
                 {
-                    Informacion.isLoading
+                    Info.isLoading
                     ?(<LoadingThink/>)
                     :(
                       <div>
                       <div className="py-5 bg-image-full" style={{ backgroundImage: `url("https://static.depositphotos.com/storage/portfolio-cover/387/3922387.jpg?1593139829")`, width: '100%'}}>
                         <div className="text-center">
                         <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
-                        <h1 className="text-dark fs-3 fw-bolder">@{ Informacion.nombre }</h1>
+                        <h1 className="text-dark fs-3 fw-bolder">@{ Info.nombre }</h1>
                         <button onClick={onFollowUser} className='btn btn-light fw-bold'>{ Valor }</button>
                         </div>
                       </div>
@@ -133,13 +149,13 @@ export const ProfilePersons = () => {
                          <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
                           <Toolbar>
                            <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-                            <PostAddIcon/>{ Informacion?.posts.length }
+                            <PostAddIcon/>{ Info?.posts.length }
                              </Typography>
                              <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-                                 <PeopleAltIcon/>{ Informacion?.follows.length }
+                                 <PeopleAltIcon/>{ Info?.follows.length }
                             </Typography>
                              <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>
-                            <GroupAddIcon/>{ Informacion.followers.length }
+                            <GroupAddIcon/>{ Info.followers.length }
                              </Typography>
                           </Toolbar>
                         </AppBar>
@@ -148,16 +164,11 @@ export const ProfilePersons = () => {
                      )
                   }
 
-    <Grid container sx={{ mt: 3 }} spacing={0} direction="column" alignItems="center" justify="center">
-    <Grid className='animate__animated animate__fadeIn' container direction='row' justify="center" alignItems='center' sx={{ mb: 1, maxWidth: `${ open ? '1000px' : '280px'}`, ml: `${ open ? '0px' : '40px' }` }}>
-
-    </Grid>
-</Grid>
-    {
-        Informacion.isLoading
+{
+        Info.isLoading
         ? (<LoadingThink/>)
         :(
-       Informacion.posts.map(post=>
+       Info.posts.map(post=>
     <Grid key={post.id} container spacing={0} direction="column" alignItems="center" justify="center">
     <Grid item xs={3}></Grid>
     <Card sx={{ width: `${ open ? '450px' : '280px'}`, ml: `${ open ? '0px' : '40px' }`, mt: 5, mb: 3 }}>
@@ -168,25 +179,16 @@ export const ProfilePersons = () => {
         </Avatar>
       }
       action={
-        <IconButton aria-label="settings">
-          <MoreVertIcon />
-        </IconButton>
+        <Box sx={{mr: 50}}>
+          <Button size='small' sx={{ color: 'black' }} onClick={ () => onClickUser(post.author_slug) }>{post.author_username}</Button>
+          <Typography sx={{ fontSize: 13 }} color='gray'>{post.category_name}</Typography>
+        </Box>
       }
-      title={ post.author_username }
-      subheader={ post.category_name }
     />
     {
       post.images.length === 0
       ? null
-      :(
-      //   <CardMedia
-      //   component="img"
-      //   height="194"
-      //   image={post.images[0]}
-      //   alt={post.author_username}
-      // />
-      <ModalPhotos imagenes={post.images}/>
-      )
+      :<ModalPhotos imagenes={post.images}/>
     }
 
     <CardContent>
@@ -198,7 +200,7 @@ export const ProfilePersons = () => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
+      <IconButton aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
         <FavoriteIcon />
       </IconButton>
       <LikesModal post={post} /><ModalComments/>
@@ -207,6 +209,7 @@ export const ProfilePersons = () => {
      </Grid>      
         ))
     }
+
 </WhitexicansLayout>
   )
 }
