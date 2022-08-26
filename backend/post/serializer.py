@@ -1,7 +1,12 @@
 from rest_framework import serializers
 
 from user.models import UserExtend
-from .models import Category, Post, PostImgs
+from .models import Category, Post, PostImgs, PostLike
+
+class PostLikesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostLike
+        fields = '__all__'
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:

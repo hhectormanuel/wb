@@ -1,7 +1,8 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from genericpath import exists
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 
 from user.models import UserExtend, User
-from .serializer import CategoriaSerializer
+from .serializer import CategoriaSerializer, PostLikesSerializer
 from .models import Category, Post, PostLike
 from rest_framework.response import Response
 from rest_framework import status
@@ -77,5 +78,15 @@ class SeguidosPostListView(ListAPIView):
         return Response(serializer.data)
 
 
-class Postlikes():
-    pass
+class Postlikes(CreateAPIView):
+    serializer_class = PostLikesSerializer
+
+    def post(self, request, slug):
+        post = Post.objects.get(slug = slug)
+        try:
+            get = PostLike.objects.get(author = request.user, post = post)
+            get.delete()
+            return Response({'like': 'borrado'})
+        except:
+            PostLike.objects.create(author = request.user, post = post)
+            return Response({'like': 'creado'})
