@@ -1,5 +1,4 @@
-from .serializer import UserSerializer, UserExtendSerializer
-from rest_framework.decorators import api_view, permission_classes
+from .serializer import UserSerializer, UserExtendSerializer, UserComplete
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
@@ -31,6 +30,17 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+
+class EditProfileAPIView(APIView):
+    #permission_classes = (IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        extendUser = UserExtend.objects.get(user = request.user)
+        serializer = UserComplete(extendUser)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        pass
+    def put(self, request, *args, **kwargs):
+        pass
 
 ## Login CreateAPIView
 class SingUp(CreateAPIView):

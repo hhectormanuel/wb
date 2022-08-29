@@ -95,9 +95,15 @@ class Postlikes(CreateAPIView):
             PostLike.objects.create(author = request.user, post = post)
             return Response({'like': 'creado'})
 
-class CommentPostAPIView(CreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class CommentPostAPIView(APIView):
+    #permission_classes = (IsAuthenticated,)
     serializer_class = CommentSerializer
+
+    def get(self, request, slug):
+        post = Post.objects.get(slug = slug)
+        comment = Comment.objects.filter(post = post)
+        serializer = CommentSerializer(comment, many = True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, slug):
         print(request.data.get('content'))

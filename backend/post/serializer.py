@@ -3,11 +3,30 @@ from rest_framework import serializers
 from user.models import UserExtend
 from .models import Category, Post, PostImgs, PostLike, Comment
 
+def commentPost(instance):
+    array = []
+    comments = Comment.objects.filter(id = instance.id)
+    for comment in comments:
+        slug = UserExtend.objects.get(user = comment.author.id)
+        array.append({
+            'user_id' : comment.author.id,
+            'username': comment.author.username,
+            'user_slug' : slug.slug,
+            'post_id' : comment.post.id,
+            'post_slug' : comment.post.slug,
+            'comment_id': comment.id,
+            'content_comment' : comment.content,
+            })
+    return array
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return commentPost(instance)
 
 class PostLikesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,21 +63,7 @@ def likePost(self, instance):
         array.append({'user_id' : like.author.id, 'username': like.author.username, 'user_slug' : slug.slug})
     return array
 
-def commentPost(self, instance):
-    array = []
-    comments = Comment.objects.filter(post = instance.id)
-    for comment in comments:
-        slug = UserExtend.objects.get(user = comment.author.id)
-        array.append({
-            'user_id' : comment.author.id,
-            'username': comment.author.username,
-            'user_slug' : slug.slug,
-            'post_id' : comment.post.id,
-            'post_slug' : comment.post.slug,
-            'comment_id': comment.id,
-            'content_comment' : comment.content,
-            })
-    return array
+
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:

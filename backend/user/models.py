@@ -21,7 +21,7 @@ class UserExtend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number=models.FloatField(unique=True, blank=True, null=True)
     ##phone number validator doesnt work
-    profile_image=models.ImageField(upload_to=profile_img, null= True, blank=True)
+    profile_image=models.CharField(max_length=300, null= True, blank=True)
     account_created = models.DateTimeField(auto_now_add=True)
     follows = models.ManyToManyField(User, related_name='follows', blank=True)
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
