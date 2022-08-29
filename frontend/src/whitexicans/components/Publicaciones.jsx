@@ -78,6 +78,10 @@ export const Publicaciones = ({ Informacion, data }) => {
       else if(pathname === `/view/${id}`){
         getInfo();
       }
+    };
+
+    const onViewPublication =(slug) => {
+      navigate(`/publication/${slug}`);
     }
     
 
@@ -119,10 +123,11 @@ export const Publicaciones = ({ Informacion, data }) => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
+      {/* <IconButton aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
         <FavoriteIcon />
-      </IconButton>
+      </IconButton> */}
       <LikesModal post={post} /><ModalComments/>
+      <Button onClick={()=>onViewPublication(post.slug)}>Ver más...</Button>
     </CardActions>
   </Card>
      </Grid>      

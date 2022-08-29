@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import axios from 'axios';
 import { useState } from 'react';
@@ -129,6 +129,10 @@ export const ProfilePersons = () => {
       });
         getInfo();
     };
+    const navigate = useNavigate();
+    const onViewPublication =(slug) => {
+      navigate(`/publication/${slug}`);
+    }
 
   return (
     <WhitexicansLayout>
@@ -200,10 +204,8 @@ export const ProfilePersons = () => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
-        <FavoriteIcon />
-      </IconButton>
       <LikesModal post={post} /><ModalComments/>
+      <Button onClick={()=>onViewPublication(post.slug)}>Ver más...</Button>
     </CardActions>
   </Card>
      </Grid>      

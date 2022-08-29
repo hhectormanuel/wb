@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { useState } from 'react'
 import { AuthContext } from '../../auth/context/AuthContext'
 import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
+import { Comments } from '../components/Comments'
 import { CrearPublicacion } from '../components/CrearPublicacion'
 import { Publicaciones } from '../components/Publicaciones'
 
@@ -20,7 +21,7 @@ export const Index = () => {
     <>
     <WhitexicansLayout>
       <CrearPublicacion/>
-
+      <Comments/>
     </WhitexicansLayout>
     </>
     )

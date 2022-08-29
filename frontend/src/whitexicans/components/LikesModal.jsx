@@ -4,8 +4,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
+import { LoadingThink } from '../../UI/LoadingThink';
+import { useNavigate } from 'react-router-dom';
 
 export const LikesModal = ({ post }) => {
+
+  const navigate = useNavigate();
 
     const style = {
         position: 'absolute',
@@ -21,6 +25,10 @@ export const LikesModal = ({ post }) => {
       const [open, setOpen] = React.useState(false);
       const handleOpen = () => setOpen(true);
       const handleClose = () => setOpen(false);
+
+      const onClickUser = (slug) => {
+        navigate(`/view/${ slug }`)
+      }
       
 
   return (
@@ -35,6 +43,20 @@ export const LikesModal = ({ post }) => {
       <Box sx={style}>
             <h5 className='text-center'>Total de me gustas</h5>
             <hr />
+            {
+                post.people_like === undefined
+                ? <LoadingThink/>
+                :(
+                  post.people_like.map(like=>
+                    <div key={like.user_id} className="d-flex align-items-center justify-content-center">
+                    <img className="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
+                    <button onClick={()=>onClickUser(like.user_slug)} className="fw-bold btn btn-light">
+                        { like.username }
+                    </button>
+                </div>
+                    )
+                )
+            }
       </Box>
     </Modal>
   </div>
