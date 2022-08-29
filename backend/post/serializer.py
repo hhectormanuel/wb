@@ -44,6 +44,22 @@ def likePost(self, instance):
         array.append({'user_id' : like.author.id, 'username': like.author.username, 'user_slug' : slug.slug})
     return array
 
+def commentPost(self, instance):
+    array = []
+    comments = Comment.objects.filter(post = instance.id)
+    for comment in comments:
+        slug = UserExtend.objects.get(user = comment.author.id)
+        array.append({
+            'user_id' : comment.author.id,
+            'username': comment.author.username,
+            'user_slug' : slug.slug,
+            'post_id' : comment.post.id,
+            'post_slug' : comment.post.slug,
+            'comment_id': comment.id,
+            'content_comment' : comment.content,
+            })
+    return array
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -70,6 +86,6 @@ class PostSerializer(serializers.ModelSerializer):
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
             'images': instancia(self, instance),
-            'comments' : []
+            'comments' : commentPost(self, instance)
         }
 
