@@ -1,13 +1,11 @@
-from genericpath import exists
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 
-from user.models import UserExtend, User
 from .serializer import CategoriaSerializer, PostLikesSerializer
-from .models import Category, Post, PostLike
+from .models import Category, Post, PostLike, Comment
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializer import PostSerializer
+from .serializer import PostSerializer, CommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from post.post import post_category_user
 from datetime import datetime
@@ -39,7 +37,9 @@ class CategoryRetriveApiView(RetrieveAPIView):
 class PostAPIVIew(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
-        return Response({'Informacion' : 'haz cargado el metodo get correctamente'}, status=status.HTTP_200_OK)
+        posts = Post.objects.all()
+        postSerializer = PostSerializer(posts, many=True)
+        return Response(postSerializer.data, status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
         return post_category_user(self, request, *args, **kwargs)
         
@@ -94,3 +94,20 @@ class Postlikes(CreateAPIView):
         except:
             PostLike.objects.create(author = request.user, post = post)
             return Response({'like': 'creado'})
+
+class CommentPostAPIView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def post(self, request, slug):
+        print(request.data.get('content'))
+        if len(request.data.get('content')) <= 255:
+            comment = Comment.objects.create(
+            content = request.data.get('content'),
+            author = request.user,
+            post = Post.objects.get(slug=slug)
+            )
+            serializer = CommentSerializer(comment)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error' : 'the content cant be > 255'}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,7 +1,13 @@
 from rest_framework import serializers
 
 from user.models import UserExtend
-from .models import Category, Post, PostImgs, PostLike
+from .models import Category, Post, PostImgs, PostLike, Comment
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class PostLikesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +24,11 @@ class PostImgsSerializer(serializers.ModelSerializer):
         model = PostImgs
         fiels = ('_all_',)
 
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostLike
+        fields = '__all__'
+
 def instancia(self, instance):
     post = Post.objects.get(id = instance.id)
     array = []
@@ -25,12 +36,24 @@ def instancia(self, instance):
         array.append(img.image)
     return array
 
+def likePost(self, instance):
+    array = []
+    likes = PostLike.objects.filter(post = instance.id)
+    for like in likes:
+        slug = UserExtend.objects.get(user = like.author.id)
+        array.append({'user_id' : like.author.id, 'username': like.author.username, 'user_slug' : slug.slug})
+    return array
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'title', 'description', 'author', 'category', 'slug', 'post_created')
+
+    def comments(self, instance):
+        pass
+
     
+
 
     def to_representation(self, instance):
         return {
@@ -39,12 +62,14 @@ class PostSerializer(serializers.ModelSerializer):
             'description': instance.description,
             'post_created' : instance.post_created,
             'post_likes' : instance.get_likes(),
+            'people_like' : likePost(self, instance),
             'slug' : instance.slug,
             'author_id': instance.author.id,
             'author_username': instance.author.username,
             'author_slug': UserExtend.objects.get(user = instance.author).slug,
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
-            'images': instancia(self, instance)
+            'images': instancia(self, instance),
+            'comments' : []
         }
 

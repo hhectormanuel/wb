@@ -34,6 +34,9 @@ class Post(models.Model):
     def get_comments(self):
         comments = len(self.comment_set.all())
         return comments
+    
+    def people_like(self):
+        return self.postlike_set.all()
 
 
 class PostImgs(models.Model):
