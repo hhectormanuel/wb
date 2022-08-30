@@ -17,7 +17,7 @@ export const SideBarItem = ({ nombre, icon, id }) => {
   const navigate = useNavigate();
 
   const onClickSideBar = (id) => {
-    if(id === 6){
+    if(id === 7){
       logout();
     }
     else if(id === 2){
@@ -33,6 +33,8 @@ export const SideBarItem = ({ nombre, icon, id }) => {
       navigate('/populars')
     }else if(id === 4){
       navigate('/follows')
+    }else if(id === 6){
+      navigate(`/settings/${ user.slug }`);
     }
 
   }

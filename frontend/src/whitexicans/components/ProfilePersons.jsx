@@ -204,7 +204,7 @@ export const ProfilePersons = () => {
       </Typography>
     </CardContent>
     <CardActions disableSpacing>
-      <LikesModal post={post} /><ModalComments/>
+      <LikesModal post={post} />
       <Button onClick={()=>onViewPublication(post.slug)}>Ver más...</Button>
     </CardActions>
   </Card>

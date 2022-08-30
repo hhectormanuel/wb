@@ -7,6 +7,10 @@ export const createReducer = (state, action) => {
 
         case types.createPublication:
             return action.payload;
+        
+        case types.isSavingFalse:
+            return action.payload;
+        
     
         default:
             state;

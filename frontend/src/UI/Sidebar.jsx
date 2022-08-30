@@ -8,6 +8,7 @@ import { useScreenSize } from '../whitexicans/hooks/useScreenSize';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const SideBar = ({ drawerWidth = 240 }) => {
 
@@ -19,7 +20,8 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         { id: 3, nombre: 'Más populares', icon: <PostAddIcon/> },
         { id: 4, nombre: 'Publicaciones de amigos', icon: <LocalPostOfficeIcon/> },
         { id: 5, nombre: 'Perfíl', icon: <AccountCircleIcon/> },
-        { id: 6, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> },
+        { id: 6, nombre: 'Ajustes', icon: <SettingsIcon/> },
+        { id: 7, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> },
     ];
 
     const [open, setOpen] = useState(false);

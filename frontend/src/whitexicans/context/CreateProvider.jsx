@@ -27,6 +27,18 @@ export const CreateProvider = ({ children }) => {
       dispatch(action);
     };
 
+    const isSavingFalse = () => {
+      const publicacion = {
+        isSaving: false,
+      }
+      const action = {
+        type: types.isSavingFalse,
+        payload: publicacion
+      };
+      dispatch(action);
+    };
+  
+
     const onCreateNewPublication = () => {
       const publicacion = {
         isSaving: false,
@@ -110,8 +122,36 @@ export const CreateProvider = ({ children }) => {
       }
     };
 
+    const onCreateNewComment = async() => {
+
+    };
+
+    const [Comment, setComments] = useState({
+      comment: [],
+      isLoading: true,
+    });
+
+    let data = [];
+
+    const onGetComments = async(id) => {
+      const token = localStorage.getItem('token');
+        const url = `http://localhost:8000/comment/${ id }`;
+        const resp = await axios.get(url,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        for (const comment of resp.data) {
+          data.push(comment[0]);
+        }
+        setComments({
+          comment: data,
+          isLoading: false
+        })
+    }
+
   return (
-    <CreateContext.Provider value={{ createPublication, Categorias: Categorias, Publicacion: Publicacion, startUploadingFiles, Photos: Photos }}>
+    <CreateContext.Provider value={{ createPublication, Categorias: Categorias, Publicacion: Publicacion, startUploadingFiles, Photos: Photos, onGetComments, Comment, isSaving, isSavingFalse }}>
         { children }
     </CreateContext.Provider>
   )
