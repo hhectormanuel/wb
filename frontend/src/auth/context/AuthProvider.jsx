@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         dispatch(action);
     };
 
-    const login = (access, username, user_id, slug, follows, posts, followers) => {
+    const login = (access, username, user_id, slug, follows, posts, followers, img) => {
         const user = {
             status: 'auth',
             id: user_id,
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
             follows: follows,
             followers: followers,
             posts: posts,
+            img: img
         };
         const action = {
             type: types.login,
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${access}`
                 }
             });
-            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers);
+            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers, respuesta.data.profile_img);
           } catch (error) {
             logout();
             if(error.response?.data.detail === 'No active account found with the given credentials')
@@ -108,6 +109,7 @@ export const AuthProvider = ({ children }) => {
 
         const onRefreshPublications = async() => {
             const token = localStorage.getItem('token');
+            if(!token) return logout();
             const decoded = jwt_decode(token);
             slug = decoded.slug;
             const { user_id } = decoded;
@@ -155,6 +157,7 @@ export const AuthProvider = ({ children }) => {
     const getFollowsPublications = async() => {
         const url = 'http://127.0.0.1:8000/post/follows/';
         const token = localStorage.getItem('token');
+        if(!token) return;
         try {
           const resp = await axios.get(url,{
             headers:{
@@ -173,6 +176,7 @@ export const AuthProvider = ({ children }) => {
       const getMostPopularPublications = async() => {
         const url = 'http://127.0.0.1:8000/post/popular/';
         const token = localStorage.getItem('token');
+        if(!token) return;
         try {
           const resp = await axios.get(url,{
             headers:{

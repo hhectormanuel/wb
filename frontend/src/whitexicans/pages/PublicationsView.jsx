@@ -12,6 +12,8 @@ import { ModalComments } from '../components/ModalComments';
 import { ModalPhotos } from '../components/ModalPhotos';
 import { useScreenSize } from '../hooks/useScreenSize';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Comments } from '../components/Comments';
+import { CreateContext } from '../context/CreateContex';
 
 export const PublicationsView = () => {
 
@@ -22,6 +24,8 @@ export const PublicationsView = () => {
     const [Like, setLike] = useState(false);
 
   const [open, setOpen] = React.useState(false);
+
+  const { Comment, onGetComments } = useContext(CreateContext);
 
   const getSizeScreen = () => {
       if(width >= 606) {
@@ -83,10 +87,16 @@ export const PublicationsView = () => {
             getPublications();
       };
 
+
+
+    const getComments = async() => {
+      onGetComments(id);
+  }
+
     useEffect(() => {
       getPublications();
+      getComments();
     }, []);
-    
 
   return (
     <WhitexicansLayout>
@@ -129,13 +139,14 @@ export const PublicationsView = () => {
                       <IconButton sx={{ color: `${ Like ? 'red' : 'gray' }` }} aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
                         <FavoriteIcon />
                       </IconButton>
-                      <LikesModal post={post} /><ModalComments/>
+                      <LikesModal post={post} />
                     </CardActions>
                   </Card>
                      </Grid>   
                     )
             )
         }
+              <Comments comment={Comment}/>
     </WhitexicansLayout>
   )
 }

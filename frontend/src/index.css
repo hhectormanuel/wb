@@ -14,3 +14,18 @@
   font-family: 'Secular One';
   font-size: 30px;
 }
+
+
+p{
+  max-width: 900px;
+}
+
+.div{
+  max-width: 900px;
+}
+
+@media only screen and (max-width: 578px) {
+  p, .div{
+    max-width: 180px;
+  }
+}

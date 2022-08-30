@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 export const useAuthStore = () => {
 
-    const { logout, checkingAuth, login } = useContext(AuthContext);
+    const { logout, checkingAuth, login, user } = useContext(AuthContext);
 
     const refreshUrl = 'http://127.0.0.1:8000/api/token/refresh/';
 
@@ -31,7 +31,7 @@ export const useAuthStore = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers);
+            login(access, username, user_id, slug, respuesta.data.follows, respuesta.data.posts, respuesta.data.followers, respuesta.data.profile_img);
             
         } catch (error) {
             console.log(error)

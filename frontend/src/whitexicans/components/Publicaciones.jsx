@@ -126,7 +126,8 @@ export const Publicaciones = ({ Informacion, data }) => {
       {/* <IconButton aria-label="add to favorites" onClick={()=>putLike(post.slug)} >
         <FavoriteIcon />
       </IconButton> */}
-      <LikesModal post={post} /><ModalComments/>
+      <LikesModal post={post} />
+      {/* <ModalComments/> */}
       <Button onClick={()=>onViewPublication(post.slug)}>Ver más...</Button>
     </CardActions>
   </Card>

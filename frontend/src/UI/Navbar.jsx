@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Badge, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 import { useContext } from 'react';
 import { AuthContext } from '../auth/context/AuthContext';
@@ -29,8 +29,9 @@ export const NavBar = ({ drawerWidth = 255 }) => {
             </IconButton>
 
             <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                <Typography variant='h6' noWrap component='div'> Whitexicans </Typography>
-
+            <Badge sx={{ mt: 2 }} badgeContent='Beta v1.0.0' color="secondary">
+                <Typography variant='h6' noWrap component='div'> Whitexicans Blog </Typography>
+                </Badge>
                 <IconButton onClick={()=>navigate(`/perfil/${ user.slug }`)} color='secondary'>
             <Avatar sx={{ bgcolor: 'green' }} aria-label="recipe">
                { user.username.charAt(0) }

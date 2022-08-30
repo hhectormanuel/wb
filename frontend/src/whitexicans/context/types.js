@@ -1,4 +1,5 @@
 export const types = {
     isSaving: 'saving',
-    createPublication: 'create'
+    createPublication: 'create',
+    isSavingFalse: 'savingfalse',
 }
