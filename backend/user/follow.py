@@ -9,7 +9,8 @@ class Follow_followers():
             user ={
                 'id' : followuser.id,
                 'username': followuser.username,
-                'username_slug' : UserExtend.objects.get(user = followuser).slug
+                'username_slug' : UserExtend.objects.get(user = followuser).slug,
+                'user_img' : UserExtend.objects.get(user = followuser).profile_image
             }
             follows.append(user)
         return follows
@@ -22,7 +23,10 @@ class Follow_followers():
             user ={
                 'id' : followuser.id,
                 'username': followuser.username,
-                'username_slug' : UserExtend.objects.get(user = followuser).slug
+                'username_slug' : UserExtend.objects.get(user = followuser).slug,
+                'user_img' : UserExtend.objects.get(user = followuser).profile_image
+                
+
             }
             followers.append(user)
         return followers

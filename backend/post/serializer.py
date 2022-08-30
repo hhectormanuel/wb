@@ -12,6 +12,7 @@ def commentPost(instance):
             'user_id' : comment.author.id,
             'username': comment.author.username,
             'user_slug' : slug.slug,
+            'user_img' : slug.profile_image,
             'post_id' : comment.post.id,
             'post_slug' : comment.post.slug,
             'comment_id': comment.id,
