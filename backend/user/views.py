@@ -99,3 +99,12 @@ class FollowAPIView(APIView):
             myUser.follows.add(follow_to.user)
             follow_to.followers.add(user)
             return Response({'correcto' : 'haz comenzado a seguir'}, status.HTTP_200_OK)
+    
+## vista para poner foto de perfil
+class ProfilePictureAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def put(self, request):
+        userExtend = UserExtend.objects.get(user=request.user)
+        userExtend.profile_image = request.data.get('img')
+        userExtend.save()
+        return Response({'imagen':'actualizada'}, status.HTTP_202_ACCEPTED)
