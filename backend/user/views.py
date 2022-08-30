@@ -38,9 +38,20 @@ class EditProfileAPIView(APIView):
         serializer = UserComplete(extendUser)
         return Response(serializer.data,status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
-        data = request.data
+        user = request.user
+        userExtend = UserExtend.objects.get(user = user)
+        phone_number=request.data.get('phone_number')
+        profile_image=request.data.get('profile_image')
+        first_name = request.data.get('first_name')
+        last_name =  request.data.get('last_name')
         return Response({}, status=status.HTTP_201_CREATED)
     def put(self, request, *args, **kwargs):
+        user = request.user
+        userExtend = UserExtend.objects.get(user = user)
+        phone_number=request.data.get('phone_number')
+        profile_image=request.data.get('profile_image')
+        first_name = request.data.get('first_name'),
+        last_name =  request.data.get('last_name'),
         return Response({}, status=status.HTTP_201_CREATED)
 
 ## Login CreateAPIView

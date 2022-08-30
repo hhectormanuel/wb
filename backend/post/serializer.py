@@ -60,10 +60,12 @@ def likePost(self, instance):
     likes = PostLike.objects.filter(post = instance.id)
     for like in likes:
         slug = UserExtend.objects.get(user = like.author.id)
-        array.append({'user_id' : like.author.id, 'username': like.author.username, 'user_slug' : slug.slug})
+        array.append({'user_id' : like.author.id, 'username': like.author.username, 'user_slug' : slug.slug, 'user_img' : slug.profile_image})
     return array
 
-
+def autor_img(instance):
+    autor = UserExtend.objects.get(user = instance.author)
+    return autor.profile_image
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,6 +84,7 @@ class PostSerializer(serializers.ModelSerializer):
             'slug' : instance.slug,
             'author_id': instance.author.id,
             'author_username': instance.author.username,
+            'author_img' : autor_img(instance),
             'author_slug': UserExtend.objects.get(user = instance.author).slug,
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
