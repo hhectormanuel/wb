@@ -106,14 +106,12 @@ class CommentPostAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, slug):
-        print(request.data.get('content'))
         if len(request.data.get('content')) <= 255:
-            comment = Comment.objects.create(
-            content = request.data.get('content'),
-            author = request.user,
-            post = Post.objects.get(slug=slug)
+            Comment.objects.create(
+                content = request.data.get('content'),
+                author= request.user,
+                post = Post.objects.get(slug=slug)
             )
-            serializer = CommentSerializer(comment)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'comment':'the comment is done'}, status=status.HTTP_201_CREATED)
         else:
             return Response({'error' : 'the content cant be > 255'}, status=status.HTTP_400_BAD_REQUEST)

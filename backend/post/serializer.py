@@ -70,11 +70,6 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'title', 'description', 'author', 'category', 'slug', 'post_created')
 
-    def comments(self, instance):
-        pass
-
-    
-
 
     def to_representation(self, instance):
         return {
@@ -91,6 +86,6 @@ class PostSerializer(serializers.ModelSerializer):
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
             'images': instancia(self, instance),
-            'comments' : commentPost(self, instance)
+            'comments' : commentPost(instance)
         }
 

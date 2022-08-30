@@ -38,9 +38,10 @@ class EditProfileAPIView(APIView):
         serializer = UserComplete(extendUser)
         return Response(serializer.data,status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
-        pass
+        data = request.data
+        return Response({}, status=status.HTTP_201_CREATED)
     def put(self, request, *args, **kwargs):
-        pass
+        return Response({}, status=status.HTTP_201_CREATED)
 
 ## Login CreateAPIView
 class SingUp(CreateAPIView):
