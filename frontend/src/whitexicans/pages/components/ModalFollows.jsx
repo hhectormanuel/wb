@@ -53,7 +53,9 @@ export const ModalFollows = () => {
                 : (
                     user.follows.map(follow=>
                       <div key={follow.id} className="d-flex align-items-center justify-content-center">
-                      <img className="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
+                        <Avatar sx={{ bgcolor: 'green' }} aria-label="recipe">
+                    <img src={`${follow.user_img ? follow.user_img : 'https://dummyimage.com/40x40/ced4da/6c757d'}`} width='40px' height='40px' alt="..." />
+                    </Avatar>
                       <button onClick={()=>onClickUser(follow.username_slug)} className="fw-bold btn btn-light">
                           { follow.username }
                       </button>

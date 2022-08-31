@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Avatar, Grid } from '@mui/material'
 import axios from 'axios';
 import React, { useContext } from 'react'
 import { useEffect } from 'react';
@@ -47,7 +47,9 @@ export const Comments = ({ comment }) => {
                                     :(
                                       Comment.comment.map(c=>
                                         <div key={c.comment_id} className="d-flex mb-4">
-                                            <div className="flex-shrink-0"><img className="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                          <Avatar sx={{ bgcolor: 'green' }} aria-label="recipe">
+                                            <div className="flex-shrink-0"><img src={`${c.user_img ? c.user_img : 'https://dummyimage.com/40x40/ced4da/6c757d'}`} width='40px' height='40px' alt="..." /></div>
+                                            </Avatar>
                                             <div className="ms-3">
                                                 <div className="fw-bold">{c.username}</div>
                                                 <p width='20px'>{ c.content_comment }</p>

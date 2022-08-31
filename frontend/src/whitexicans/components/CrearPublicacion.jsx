@@ -1,5 +1,5 @@
 import { SaveOutlined } from '@mui/icons-material'
-import { Avatar, Button, CircularProgress, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
+import { Alert, Avatar, Button, CircularProgress, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
 import React, { useMemo, useRef } from 'react'
 import { useScreenSize } from '../hooks/useScreenSize';
 import SendIcon from '@mui/icons-material/Send';
@@ -12,21 +12,31 @@ import { useForm } from '../hooks/useForm';
 import { CreateContext } from '../context/CreateContex';
 import Swal from 'sweetalert2'
 import { LoadingThink } from '../../UI/LoadingThink';
+import { useEffect } from 'react';
 
 const formData = {
   Titulo: '',
   Descripcion: '',
-}  
+};
+
+const formValidations = {
+  Titulo: [ (value) => value.length <= 40 && value.length >= 1 , '40 carácteres máximo'],
+  Descripcion: [  (value) => value.length <= 255 && value.length >= 1, '255 carácteres máximo' ],
+}
 
 export const CrearPublicacion = () => {
 
-  const { Titulo, Descripcion, onInputChange } = useForm(formData);
+  const { Titulo, Descripcion, onInputChange, isFormValid, TituloValid, DescripcionValid } = useForm(formData, formValidations);
 
   const [Cat, setCat] = useState('');
 
-  const { openModal, setOpenModal } = useContext(AuthContext);
+  const { openModal, setOpenModal, onRefreshPublications } = useContext(AuthContext);
 
   const { createPublication, Categorias, Publicacion, Photos, startUploadingFiles } = useContext(CreateContext);
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const [Mensaje, setMensaje] = useState();
 
   const isSavingPost = useMemo( () => Publicacion.isSaving === true );
 
@@ -38,16 +48,20 @@ export const CrearPublicacion = () => {
 
     const onNewPublication = (e) => {
       e.preventDefault();
+      setFormSubmitted(true);
+      if (!isFormValid) return;
       createPublication(Titulo, Descripcion, Cat);
-      Swal.fire({
-        icon: 'success',
-        title: 'Publicado',
-        showConfirmButton: false,
-        timer: 1500
-      })
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Publicado',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // })
       setOpenModal(false);
+      onRefreshPublications();
+      setMensaje('Publicación realizada con éxito')
     }
-
+    
     const inputRef = useRef();
 
     const getSizeScreen = () => {
@@ -100,6 +114,25 @@ export const CrearPublicacion = () => {
             name='title'
             value=''
         />
+
+            {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity='success'>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
+
       <Modal
         open={openModal}
         onClose={handleClose}
@@ -108,9 +141,12 @@ export const CrearPublicacion = () => {
       >
         <Box sx={style}>
           <Typography align='center' variant='h6' sx={{ mb: 2 }}>CREAR PUBLICACIÓN</Typography>
+          <Box textAlign='center'>
+          <Button onClick={handleClose}>Cancelar</Button>
+          </Box>
           <hr/>
           <form onSubmit={onNewPublication}>
-        <TextField 
+        <TextField
             type="text"
             variant="filled"
             fullWidth
@@ -120,7 +156,11 @@ export const CrearPublicacion = () => {
             name='Titulo'
             value={Titulo}
             onChange={onInputChange}
+            error={ !!TituloValid && formSubmitted }
+            helperText={ TituloValid }
         />
+
+        <p className='text-secondary'>{Titulo.length}/40</p>
 
         <TextField 
             type="text"
@@ -132,7 +172,11 @@ export const CrearPublicacion = () => {
             name='Descripcion'
             value={Descripcion}
             onChange={onInputChange}
+            error={ !!DescripcionValid && formSubmitted }
+            helperText={ DescripcionValid }
         />
+
+        <p className='text-secondary'>{Descripcion.length}/255</p>
 
           <Grid
             container
@@ -146,6 +190,7 @@ export const CrearPublicacion = () => {
           >
             <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
             <Select
+              required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Age"

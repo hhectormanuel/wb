@@ -4,7 +4,7 @@ import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/system';
 import ImageIcon from '@mui/icons-material/Image';
-import { AppBar, Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { useState } from 'react';
 import { CreateContext } from '../context/CreateContex';
 import axios from 'axios';
@@ -16,6 +16,7 @@ export const SettingsPage = () => {
   const isSavingPost = useMemo( () => Publicacion.isSaving === true );
   const inputRef = useRef();
   const [Foto, setFoto] = useState();
+  const [Mensaje, setMensaje] = useState();
 
   const fileUpload2 = async( file ) => {
     isSaving();
@@ -59,7 +60,7 @@ export const SettingsPage = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(resp)
+      setMensaje('Imagen cambiada correctamente.')
     } catch (error) {
       console.log(error)
     }
@@ -107,6 +108,23 @@ export const SettingsPage = () => {
               }
               
             </Box>
+            {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity='success'>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
         </WhitexicansLayout>
     </>
   )

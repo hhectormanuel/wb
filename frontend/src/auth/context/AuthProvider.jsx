@@ -178,6 +178,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if(!token) return;
         try {
+          if(!token) return;
           const resp = await axios.get(url,{
             headers:{
               'Authorization': `Bearer ${token}`

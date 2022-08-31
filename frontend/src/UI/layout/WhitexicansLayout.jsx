@@ -15,7 +15,6 @@ export const WhitexicansLayout = ({ children }) => {
         <Toolbar />
 
         { children }
-        
     </Box>
 </Box>
   )

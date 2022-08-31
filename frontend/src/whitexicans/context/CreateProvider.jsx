@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react'
+import React, { useContext, useReducer, useState } from 'react'
 import { CreateContext } from './CreateContex'
 import axios from 'axios';
 import { useEffect } from 'react';
@@ -52,8 +52,8 @@ export const CreateProvider = ({ children }) => {
 
     const getCategory = async() => {
         const token = localStorage.getItem('token');
-        if(!token) return;
         const url = 'http://127.0.0.1:8000/category/';
+        if(!token) return;
         const resp = await axios.get(url,{
           headers: {
             'Authorization': `Bearer ${token}`
@@ -111,6 +111,7 @@ export const CreateProvider = ({ children }) => {
     const createPublication = async(titulo, descripcion, categoria) => {
       const token = localStorage.getItem('token');
       const url = 'http://localhost:8000/post/';
+      if(!token) return;
       try {
         const resp = await axios.post(url, { title: titulo, description: descripcion, category: categoria, image: Photos  },{
           headers:{
@@ -120,10 +121,6 @@ export const CreateProvider = ({ children }) => {
       } catch (error) {
         console.log(error)
       }
-    };
-
-    const onCreateNewComment = async() => {
-
     };
 
     const [Comment, setComments] = useState({
@@ -136,6 +133,7 @@ export const CreateProvider = ({ children }) => {
     const onGetComments = async(id) => {
       const token = localStorage.getItem('token');
         const url = `http://localhost:8000/comment/${ id }`;
+        if(!token) return;
         const resp = await axios.get(url,{
           headers: {
             'Authorization': `Bearer ${token}`

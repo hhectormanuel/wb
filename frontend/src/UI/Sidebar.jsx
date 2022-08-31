@@ -9,7 +9,8 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
-
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import InfoIcon from '@mui/icons-material/Info';
 export const SideBar = ({ drawerWidth = 240 }) => {
 
     const { width, height } = useScreenSize();
@@ -21,6 +22,8 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         { id: 4, nombre: 'Publicaciones de amigos', icon: <LocalPostOfficeIcon/> },
         { id: 5, nombre: 'Perfíl', icon: <AccountCircleIcon/> },
         { id: 6, nombre: 'Ajustes', icon: <SettingsIcon/> },
+        { id: 8, nombre: 'Publicidad', icon: <LocalLibraryIcon/> },
+        { id: 9, nombre: 'Acerca de', icon: <InfoIcon/> },
         { id: 7, nombre: 'Cerrar sesión', icon: <LogoutOutlined/> },
     ];
 
