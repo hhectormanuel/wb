@@ -35,6 +35,10 @@ class Post(models.Model):
         comments = len(self.comment_set.all())
         return comments
     
+    def comments(self):
+        return self.comment_set.all()
+
+    
     def people_like(self):
         return self.postlike_set.all()
 

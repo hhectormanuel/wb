@@ -27,6 +27,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
+        #return super().to_representation(instance)
         return commentPost(instance)
 
 class PostLikesSerializer(serializers.ModelSerializer):
@@ -68,6 +69,26 @@ def autor_img(instance):
     autor = UserExtend.objects.get(user = instance.author)
     return autor.profile_image
 
+def comments(instance):
+    array = []
+    print(instance.comments())
+    for comment in instance.comments():
+        print(comment)
+        
+        user = UserExtend.objects.get(user = comment.author.id)
+        print(user)
+        array.append({
+            'user_id' : comment.author.id,
+            'username': comment.author.username,
+            'user_slug' : user.slug,
+            'user_img' : user.profile_image,
+            'post_id' : comment.post.id,
+            'post_slug' : comment.post.slug,
+            'comment_id': comment.id,
+            'content_comment' : comment.content,
+        })
+    return array
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -90,6 +111,6 @@ class PostSerializer(serializers.ModelSerializer):
             'category_id': instance.category.id,
             'category_name' : instance.category.category_name,
             'images': instancia(self, instance),
-            'comments' : commentPost(instance)
+            'comments' : comments(instance)
         }
 
