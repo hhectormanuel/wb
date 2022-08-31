@@ -84,7 +84,7 @@ export const ProfilePage = () => {
         UserInfo.isLoading
         ? <LoadingThink/>
         :(
-          <Box sx={{ flexGrow: 1, mb: 5, ml: 5 }}>
+          <Box sx={{ flexGrow: 1, mb: 5, ml: 2 }}>
           <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
             <Toolbar>
             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>

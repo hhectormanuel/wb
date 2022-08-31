@@ -87,15 +87,47 @@ export const CrearPublicacion = () => {
         bgcolor: 'white',
         boxShadow: 24,
         p: 4,
+        overflow: `${ open ? null : 'scroll' }`,
+        display:`${ open ? null : 'block' }`,
+        height:`${ open ? null : '100%' }`,
       };
 
       const handleChange = event => {
         setCat(event.target.value);
       };
 
+      const [Severidad, setSeveridad] = useState();
+
+      const png = '.png';
+      const jpg = '.jpg';
+      const jpeg = '.jpeg';
+
       const onFileInputChange = (e) => {
         if(e.target.files === 0) return;
-        startUploadingFiles(e.target.files)
+        for(let i=0; i<=e.target.files.length; i++){
+          if(e.target.files[i] === undefined){
+            break;
+          }
+          if(e.target.files[0].name.endsWith(png)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else if(e.target.files[0].name.endsWith(jpg)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else if(e.target.files[0].name.endsWith(jpeg)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else{
+            setSeveridad('error');
+            setMensaje('Formato de imagen no válido. ');
+          }
+        }
       }
 
   return (
@@ -126,7 +158,7 @@ export const CrearPublicacion = () => {
                 justifyContent="center"
                 >
                 <Grid item xs={3} sx={{mt: 2}} align='center'>
-                  <Alert severity='success'>{Mensaje}</Alert>
+                  <Alert severity={Severidad}>{Mensaje}</Alert>
                 </Grid>
               </Grid>
               )
@@ -140,7 +172,7 @@ export const CrearPublicacion = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography align='center' variant='h6' sx={{ mb: 2 }}>CREAR PUBLICACIÓN</Typography>
+          <Typography align='center' variant='h6' sx={{ mb: 0 }}>CREAR PUBLICACIÓN</Typography>
           <Box textAlign='center'>
           <Button onClick={handleClose}>Cancelar</Button>
           </Box>
@@ -168,7 +200,7 @@ export const CrearPublicacion = () => {
             fullWidth
             multiline
             placeholder="¿Qué sucedió en el día de hoy?"
-            minRows={ 5 }
+            minRows={ 4 }
             name='Descripcion'
             value={Descripcion}
             onChange={onInputChange}
@@ -222,7 +254,11 @@ export const CrearPublicacion = () => {
                 AGREGAR IMAGEN
               </Button>
               </Box>
-
+              <div className="text-center text-secondary">
+                {
+                  Photos.length === 0 ? 'Formatos Válidos: (png, jpg, jpeg)' : null
+                }
+              </div>
               <div className="text-center">
               {
                 Photos.length === 0
@@ -233,6 +269,23 @@ export const CrearPublicacion = () => {
                     )
                 )
               }
+              {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity={Severidad}>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
               </div>
         
                       <Button
