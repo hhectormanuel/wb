@@ -146,6 +146,18 @@ if DEBUG == True:
         'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'whitexican',
+        'USER': 'whitexican_user',
+        'PASSWORD': 'HdGnGZpnniz2rck2I8hYCETSn0qyuUkz',
+        'HOST': 'dpg-cc8chpcgqg4fs9cuve40-a',
+        'PORT': '5432',
+    }
+}
+
 
 
 
