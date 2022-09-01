@@ -4,7 +4,7 @@ import { WhitexicansLayout } from '../../UI/layout/WhitexicansLayout'
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/system';
 import ImageIcon from '@mui/icons-material/Image';
-import { AppBar, Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { useState } from 'react';
 import { CreateContext } from '../context/CreateContex';
 import axios from 'axios';
@@ -16,6 +16,8 @@ export const SettingsPage = () => {
   const isSavingPost = useMemo( () => Publicacion.isSaving === true );
   const inputRef = useRef();
   const [Foto, setFoto] = useState();
+  const [Mensaje, setMensaje] = useState();
+  const [Severidad, setSeveridad] = useState();
 
   const fileUpload2 = async( file ) => {
     isSaving();
@@ -43,9 +45,38 @@ export const SettingsPage = () => {
     fileUpload2(files[0]);
   };
 
+  const png = '.png';
+  const jpg = '.jpg';
+  const jpeg = '.jpeg';
+
   const onGetImagen = (e) => {
-    isSaving();
-    startUploadingFiles(e.target.files)
+    try {
+      if(e.target.files[0].name.endsWith(png)){
+        startUploadingFiles(e.target.files);
+        isSaving();
+        setSeveridad();
+        setMensaje();
+        return;
+      }else if(e.target.files[0].name.endsWith(jpg)){
+        startUploadingFiles(e.target.files);
+        isSaving();
+        setSeveridad();
+        setMensaje();
+        return;
+      }else if(e.target.files[0].name.endsWith(jpeg)){
+        startUploadingFiles(e.target.files);
+        isSaving();
+        setSeveridad();
+        setMensaje();
+        return;
+      }else{
+        setSeveridad('error');
+        setMensaje('Formato de imagen no válido.');
+      }
+    } catch (error) {
+      isSavingFalse();
+    }
+
   }
 
   const onChangeProfilePhoto = async() => {
@@ -59,7 +90,8 @@ export const SettingsPage = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(resp)
+      setSeveridad('success');
+      setMensaje('Imagen cambiada correctamente.');
     } catch (error) {
       console.log(error)
     }
@@ -95,6 +127,11 @@ export const SettingsPage = () => {
                 <img src={Foto} width='150px'></img>
               </div>)
             }
+            <div className="text-center text-secondary">
+            {
+              Foto === undefined ? 'Formatos Válidos: (png, jpg, jpeg)' : null
+            }
+          </div>
 
 
             <input type='file' onChange={onGetImagen} name='Imagen' ref={inputRef} hidden></input>
@@ -107,6 +144,23 @@ export const SettingsPage = () => {
               }
               
             </Box>
+            {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity={Severidad}>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
         </WhitexicansLayout>
     </>
   )

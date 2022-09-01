@@ -22,6 +22,7 @@ export const SideBarItem = ({ nombre, icon, id }) => {
     }
     else if(id === 2){
       setOpenModal(true);
+      navigate(`/perfil/${ user.slug }`)
     }
     else if(id === 5){
       navigate(`/perfil/${ user.slug }`)
@@ -35,6 +36,12 @@ export const SideBarItem = ({ nombre, icon, id }) => {
       navigate('/follows')
     }else if(id === 6){
       navigate(`/settings/${ user.slug }`);
+    }
+    else if(id === 8){
+      navigate('/publicidad')
+    }
+    else if(id === 9){
+      navigate('/about')
     }
 
   }

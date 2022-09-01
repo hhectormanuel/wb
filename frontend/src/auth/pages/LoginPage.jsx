@@ -26,7 +26,7 @@ const formData = {
 
 const formValidations = {
   username: [ (value) => value.length >= 5 , 'El nombre debe contener mas de 5 caracteres'],
-  password: [  (value) => value.length >= 2, 'La contraseña debe tener 6 caracteres o más' ],
+  password: [  (value) => value.length >= 6, 'La contraseña debe tener 6 caracteres o más' ],
 }
 
 export const LoginPage = () => {
@@ -68,8 +68,6 @@ export const LoginPage = () => {
                 autoFocus
                 value={username}
                 onChange={ onInputChange }
-                error={ !!usernameValid && formSubmitted }
-                helperText={ usernameValid }
               />
               <TextField
                 margin="normal"
@@ -81,8 +79,6 @@ export const LoginPage = () => {
                 autoComplete="current-password"
                 value={password}
                 onChange={ onInputChange }
-                error={ !!passwordValid && formSubmitted }
-                helperText={ passwordValid }
               />
               <Button
                 type="submit"

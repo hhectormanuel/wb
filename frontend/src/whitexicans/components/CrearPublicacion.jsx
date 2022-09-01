@@ -1,5 +1,5 @@
 import { SaveOutlined } from '@mui/icons-material'
-import { Avatar, Button, CircularProgress, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
+import { Alert, Avatar, Button, CircularProgress, Grid, InputLabel, MenuItem, Modal, Select, TextField, Toolbar, Typography } from '@mui/material'
 import React, { useMemo, useRef } from 'react'
 import { useScreenSize } from '../hooks/useScreenSize';
 import SendIcon from '@mui/icons-material/Send';
@@ -12,21 +12,31 @@ import { useForm } from '../hooks/useForm';
 import { CreateContext } from '../context/CreateContex';
 import Swal from 'sweetalert2'
 import { LoadingThink } from '../../UI/LoadingThink';
+import { useEffect } from 'react';
 
 const formData = {
   Titulo: '',
   Descripcion: '',
-}  
+};
+
+const formValidations = {
+  Titulo: [ (value) => value.length <= 40 && value.length >= 1 , '40 carácteres máximo'],
+  Descripcion: [  (value) => value.length <= 255 && value.length >= 1, '255 carácteres máximo' ],
+}
 
 export const CrearPublicacion = () => {
 
-  const { Titulo, Descripcion, onInputChange } = useForm(formData);
+  const { Titulo, Descripcion, onInputChange, isFormValid, TituloValid, DescripcionValid } = useForm(formData, formValidations);
 
   const [Cat, setCat] = useState('');
 
-  const { openModal, setOpenModal } = useContext(AuthContext);
+  const { openModal, setOpenModal, onRefreshPublications } = useContext(AuthContext);
 
   const { createPublication, Categorias, Publicacion, Photos, startUploadingFiles } = useContext(CreateContext);
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const [Mensaje, setMensaje] = useState();
 
   const isSavingPost = useMemo( () => Publicacion.isSaving === true );
 
@@ -38,16 +48,20 @@ export const CrearPublicacion = () => {
 
     const onNewPublication = (e) => {
       e.preventDefault();
+      setFormSubmitted(true);
+      if (!isFormValid) return;
       createPublication(Titulo, Descripcion, Cat);
-      Swal.fire({
-        icon: 'success',
-        title: 'Publicado',
-        showConfirmButton: false,
-        timer: 1500
-      })
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Publicado',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // })
       setOpenModal(false);
+      onRefreshPublications();
+      setMensaje('Publicación realizada con éxito')
     }
-
+    
     const inputRef = useRef();
 
     const getSizeScreen = () => {
@@ -73,15 +87,47 @@ export const CrearPublicacion = () => {
         bgcolor: 'white',
         boxShadow: 24,
         p: 4,
+        overflow: `${ open ? null : 'scroll' }`,
+        display:`${ open ? null : 'block' }`,
+        height:`${ open ? null : '100%' }`,
       };
 
       const handleChange = event => {
         setCat(event.target.value);
       };
 
+      const [Severidad, setSeveridad] = useState();
+
+      const png = '.png';
+      const jpg = '.jpg';
+      const jpeg = '.jpeg';
+
       const onFileInputChange = (e) => {
         if(e.target.files === 0) return;
-        startUploadingFiles(e.target.files)
+        for(let i=0; i<=e.target.files.length; i++){
+          if(e.target.files[i] === undefined){
+            break;
+          }
+          if(e.target.files[0].name.endsWith(png)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else if(e.target.files[0].name.endsWith(jpg)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else if(e.target.files[0].name.endsWith(jpeg)){
+            startUploadingFiles(e.target.files);
+            setSeveridad();
+            setMensaje();
+            return;
+          }else{
+            setSeveridad('error');
+            setMensaje('Formato de imagen no válido. ');
+          }
+        }
       }
 
   return (
@@ -100,6 +146,25 @@ export const CrearPublicacion = () => {
             name='title'
             value=''
         />
+
+            {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity={Severidad}>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
+
       <Modal
         open={openModal}
         onClose={handleClose}
@@ -107,10 +172,13 @@ export const CrearPublicacion = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography align='center' variant='h6' sx={{ mb: 2 }}>CREAR PUBLICACIÓN</Typography>
+          <Typography align='center' variant='h6' sx={{ mb: 0 }}>CREAR PUBLICACIÓN</Typography>
+          <Box textAlign='center'>
+          <Button onClick={handleClose}>Cancelar</Button>
+          </Box>
           <hr/>
           <form onSubmit={onNewPublication}>
-        <TextField 
+        <TextField
             type="text"
             variant="filled"
             fullWidth
@@ -120,7 +188,11 @@ export const CrearPublicacion = () => {
             name='Titulo'
             value={Titulo}
             onChange={onInputChange}
+            error={ !!TituloValid && formSubmitted }
+            helperText={ TituloValid }
         />
+
+        <p className='text-secondary'>{Titulo.length}/40</p>
 
         <TextField 
             type="text"
@@ -128,11 +200,15 @@ export const CrearPublicacion = () => {
             fullWidth
             multiline
             placeholder="¿Qué sucedió en el día de hoy?"
-            minRows={ 5 }
+            minRows={ 4 }
             name='Descripcion'
             value={Descripcion}
             onChange={onInputChange}
+            error={ !!DescripcionValid && formSubmitted }
+            helperText={ DescripcionValid }
         />
+
+        <p className='text-secondary'>{Descripcion.length}/255</p>
 
           <Grid
             container
@@ -146,6 +222,7 @@ export const CrearPublicacion = () => {
           >
             <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
             <Select
+              required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Age"
@@ -177,7 +254,11 @@ export const CrearPublicacion = () => {
                 AGREGAR IMAGEN
               </Button>
               </Box>
-
+              <div className="text-center text-secondary">
+                {
+                  Photos.length === 0 ? 'Formatos Válidos: (png, jpg, jpeg)' : null
+                }
+              </div>
               <div className="text-center">
               {
                 Photos.length === 0
@@ -188,6 +269,23 @@ export const CrearPublicacion = () => {
                     )
                 )
               }
+              {
+              Mensaje
+              ? (
+                <Grid 
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Grid item xs={3} sx={{mt: 2}} align='center'>
+                  <Alert severity={Severidad}>{Mensaje}</Alert>
+                </Grid>
+              </Grid>
+              )
+              : null
+            }
               </div>
         
                       <Button

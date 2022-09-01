@@ -66,6 +66,7 @@ export const ProfilePage = () => {
       useEffect(() => {
         addInfo();
       }, []);
+
       
       
 
@@ -74,7 +75,7 @@ export const ProfilePage = () => {
 
         <div className="py-5 bg-image-full" style={{ backgroundImage: `url("https://static.depositphotos.com/storage/portfolio-cover/387/3922387.jpg?1593139829")`, width: '100%'}}>
           <div className="text-center">
-              <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
+              <img className="img-fluid rounded-circle mb-4" src={`${user.img ? user.img : 'https://dummyimage.com/150x150/6c757d/dee2e6.jpg'}`} width='150px' height='150px' alt="..." />
               <h1 className="text-dark fs-3 fw-bolder">@{ user.username }</h1>
           </div>
         </div>
@@ -83,7 +84,7 @@ export const ProfilePage = () => {
         UserInfo.isLoading
         ? <LoadingThink/>
         :(
-          <Box sx={{ flexGrow: 1, mb: 5, ml: 5 }}>
+          <Box sx={{ flexGrow: 1, mb: 5, ml: 2 }}>
           <AppBar sx={{ backgroundColor:'#E9E9E9' }} position="static">
             <Toolbar>
             <Typography variant="h6" align="center" component="div" sx={{ flexGrow: 1, color:'black' }}>

@@ -22,7 +22,7 @@ import { useEffect } from 'react';
 import { usePost } from '../hooks/usePost';
 
 export const Publicaciones = ({ Informacion, data }) => {
-
+ 
   const { user, getFollowsPublications,getMostPopularPublications,onRefreshPublications } = React.useContext(AuthContext);
 
   const { width, height } = useScreenSize();
@@ -98,7 +98,12 @@ export const Publicaciones = ({ Informacion, data }) => {
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="recipe">
-          { user.username.charAt(0) }
+          {/* { post.author_username.charAt(0) } */}
+          {
+            post.author_img
+            ? <img src={post.author_img} width='40px' height='40px' alt="..." />
+            : post.author_username.charAt(0)
+          }
         </Avatar>
       }
       action={

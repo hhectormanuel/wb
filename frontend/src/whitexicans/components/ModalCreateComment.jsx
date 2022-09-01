@@ -10,11 +10,16 @@ import { useEffect } from 'react';
 
 const formData = {
   Contenido: '',
-}  
+} 
+
+const formValidations = {
+  Contenido: [  (value) => value.length <= 255 && value.length >= 1, 'El mensaje no debe tener mas de 255 caracteres ni debe estar vacio' ],
+}
 
 export const ModalCreateComment = ({ id }) => {
 
-  const { Contenido, onInputChange } = useForm(formData);
+  const { Contenido, onInputChange, isFormValid, ContenidoValid } = useForm(formData, formValidations);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const { onGetComments, Comment } = useContext(CreateContext);
 
@@ -36,18 +41,21 @@ export const ModalCreateComment = ({ id }) => {
   // useEffect(() => {
   //   onGetComments(id);
   // }, [])
-  
-
-  const onAddComment = (e) => {
-    e.preventDefault();
-    onCreateNewComment(Contenido)
-  }
 
   const { openModal, setOpenModal } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  
+
+  const onAddComment = (e) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+    if (!isFormValid) return;
+    onCreateNewComment(Contenido)
+    setOpenModal(false)
+  }
 
   const style = {
     position: 'absolute',
@@ -94,7 +102,11 @@ export const ModalCreateComment = ({ id }) => {
             name='Contenido'
             value={Contenido}
             onChange={onInputChange}
+            error={ !!ContenidoValid && formSubmitted }
+            helperText={ ContenidoValid }
         />
+
+        <p className='text-secondary'>{Contenido.length}/255</p>
 
             {/* <input type="file" multiple name='Imagen' ref={ inputRef } hidden />
                 <Box textAlign='center'>

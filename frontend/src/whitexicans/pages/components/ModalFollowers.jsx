@@ -1,4 +1,4 @@
-import { Button, Modal } from '@mui/material'
+import { Avatar, Button, Modal } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +51,9 @@ export const ModalFollowers = () => {
                 : (
                   user.followers.map(follower=>
                     <div key={follower.id} className="d-flex align-items-center justify-content-center">
-                    <img className="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
+                      <Avatar sx={{ bgcolor: 'green' }} aria-label="recipe">
+                    <img src={`${follower.user_img ? follower.user_img : 'https://dummyimage.com/40x40/ced4da/6c757d'}`} width='40px' height='40px' alt="..." />
+                    </Avatar>
                     <button onClick={()=>onClickUser(follower.username_slug)} className="fw-bold btn btn-light">
                         { follower.username }
                     </button>

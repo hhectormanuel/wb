@@ -52,6 +52,7 @@ export const ProfilePersons = () => {
             followers: respuesta.data.followers,
             follows: respuesta.data.follows,
             posts: respuesta.data.posts,
+            img: respuesta.data.profile_img,
             isLoading: false
         });
     };
@@ -144,7 +145,7 @@ export const ProfilePersons = () => {
                       <div>
                       <div className="py-5 bg-image-full" style={{ backgroundImage: `url("https://static.depositphotos.com/storage/portfolio-cover/387/3922387.jpg?1593139829")`, width: '100%'}}>
                         <div className="text-center">
-                        <img className="img-fluid rounded-circle mb-4" src="https://dummyimage.com/150x150/6c757d/dee2e6.jpg" alt="..." />
+                        <img className="img-fluid rounded-circle mb-4" src={`${Info.img ? Info.img : 'https://dummyimage.com/150x150/6c757d/dee2e6.jpg'}`} width='150px' height='150px' alt="..." />
                         <h1 className="text-dark fs-3 fw-bolder">@{ Info.nombre }</h1>
                         <button onClick={onFollowUser} className='btn btn-light fw-bold'>{ Valor }</button>
                         </div>
@@ -179,7 +180,11 @@ export const ProfilePersons = () => {
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: 'primary.main' }} aria-label="recipe">
-          { user.username.charAt(0) }
+          {
+            Info.img
+            ? <img src={Info.img} width='40px' height='40px' alt="..." />
+            : Info.nombre.charAt(0)
+          }
         </Avatar>
       }
       action={
