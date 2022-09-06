@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from post.post import post_category_user
 from datetime import datetime
 from post.followposts import Posts as FriendPost
+from notificacion.models import Notificacion
 
 
 class CategoriaListAPIView(ListAPIView):
@@ -87,13 +88,17 @@ class Postlikes(CreateAPIView):
 
     def post(self, request, slug):
         post = Post.objects.get(slug = slug)
+        content = '{} ha dado like a tu publicacion'.format(request.user.username)
         try:
             get = PostLike.objects.get(author = request.user, post = post)
             get.delete()
-            return Response({'like': 'borrado'})
+            notificacion = Notificacion.objects.get(author=request.user, content=content, link=slug, to=post.author)
+            notificacion.delete()
+            return Response({'like': 'borrado', 'notificacion' : 'borrada'})
         except:
             PostLike.objects.create(author = request.user, post = post)
-            return Response({'like': 'creado'})
+            Notificacion.objects.create(author = request.user, content = content, link=slug, to = post.author)
+            return Response({'like': 'creado', 'notificacion' : 'creada'})
 
 class CommentPostAPIView(APIView):
     #permission_classes = (IsAuthenticated,)
@@ -106,12 +111,15 @@ class CommentPostAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, slug):
+        content = '{} ha comentado tu publicacion'.format(request.user.username)
+        post = Post.objects.get(slug=slug)
         if len(request.data.get('content')) <= 255:
             Comment.objects.create(
                 content = request.data.get('content'),
                 author= request.user,
-                post = Post.objects.get(slug=slug)
+                post = post
             )
-            return Response({'comment':'the comment is done'}, status=status.HTTP_201_CREATED)
+            Notificacion.objects.create(author = request.user, content = content, link=slug, to = post.author)
+            return Response({'comment':'the comment is done', 'notification' : 'the notification is made correctly'}, status=status.HTTP_201_CREATED)
         else:
             return Response({'error' : 'the content cant be > 255'}, status=status.HTTP_400_BAD_REQUEST)

@@ -26,4 +26,4 @@ def post_category_user(self, request, *args, **kwargs):
                 image = image
             )
         return Response({'post': post_serializer.data}, status=status.HTTP_201_CREATED)
-    return Response({'mal':'errores'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'mal':post_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

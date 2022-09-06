@@ -31,9 +31,13 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -56,6 +60,7 @@ INSTALLED_APPS = [
 
     'user',
     'post',
+    'notificacion',
 
 ]
 
@@ -113,6 +118,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://127.0.0.1:8000',
+    'https://whitexicans-react.vercel.app',
+    'https://whitexicansblog.tk',
 ]
 
 ROOT_URLCONF = 'wb.urls'
@@ -139,22 +146,15 @@ WSGI_APPLICATION = 'wb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if DEBUG == True:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
+
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'whitexican',
-        'USER': 'whitexican_user',
-        'PASSWORD': 'HdGnGZpnniz2rck2I8hYCETSn0qyuUkz',
-        'HOST': 'dpg-cc8chpcgqg4fs9cuve40-a',
-        'PORT': '5432',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'D2xDLLfvqiQ7GmzCVaQY',
+        'HOST': 'containers-us-west-55.railway.app',
+        'PORT': '5699',
     }
 }
 
